@@ -3,7 +3,6 @@ import { extractTechnologies } from "./src/scrape.js";
 import { load_technologies } from "./src/technologies/__loader.js";
 import categories from "./src/categories.json" assert { type: "json" };
 import Wappalyzer from "./src/wappalyzer.js";
-import fs from "fs";
 
 /**
  * Analyzes the given payload to identify technologies used on a webpage.

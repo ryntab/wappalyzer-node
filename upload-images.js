@@ -102,7 +102,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define the directory containing images
-const directoryPath = path.join(__dirname, './src/icons');
+const directoryPath = path.join(__dirname, './src/icons/converted');
 
 // Clear bucket and upload files in the directory
 // clearBucket(R2_BUCKET_NAME)
