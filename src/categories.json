@@ -1,0 +1,1326 @@
+[
+  {
+    "id": 74,
+    "slug": "a-b-testing",
+    "name": "A/B Testing",
+    "technologiesCount": 46,
+    "groups": [
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 68,
+    "slug": "accessibility",
+    "name": "Accessibility",
+    "technologiesCount": 28,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "slug": "accounting",
+    "name": "Accounting",
+    "technologiesCount": 3,
+    "groups": [
+      {
+        "slug": "business-tools",
+        "name": "Business tools"
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "slug": "advertising",
+    "name": "Advertising",
+    "technologiesCount": 171,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 71,
+    "slug": "affiliate-programs",
+    "name": "Affiliate programs",
+    "technologiesCount": 59,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "slug": "analytics",
+    "name": "Analytics",
+    "technologiesCount": 262,
+    "groups": [
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "slug": "appointment-scheduling",
+    "name": "Appointment scheduling",
+    "technologiesCount": 72,
+    "groups": [
+      {
+        "slug": "booking",
+        "name": "Booking"
+      }
+    ]
+  },
+  {
+    "id": 105,
+    "slug": "augmented-reality",
+    "name": "Augmented reality",
+    "technologiesCount": 13,
+    "groups": [
+      {
+        "slug": "media",
+        "name": "Media"
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "slug": "authentication",
+    "name": "Authentication",
+    "technologiesCount": 29,
+    "groups": [
+      {
+        "slug": "security",
+        "name": "Security"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "blogs",
+    "name": "Blogs",
+    "technologiesCount": 32,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 83,
+    "slug": "browser-fingerprinting",
+    "name": "Browser fingerprinting",
+    "technologiesCount": 5,
+    "groups": [
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 91,
+    "slug": "buy-now-pay-later",
+    "name": "Buy now pay later",
+    "technologiesCount": 55,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "slug": "cdn",
+    "name": "CDN",
+    "technologiesCount": 58,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "slug": "ci",
+    "name": "CI",
+    "technologiesCount": 3,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "slug": "cms",
+    "name": "CMS",
+    "technologiesCount": 351,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "slug": "crm",
+    "name": "CRM",
+    "technologiesCount": 126,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      },
+      {
+        "slug": "business-tools",
+        "name": "Business tools"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "slug": "caching",
+    "name": "Caching",
+    "technologiesCount": 17,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 98,
+    "slug": "cart-abandonment",
+    "name": "Cart abandonment",
+    "technologiesCount": 18,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "slug": "comment-systems",
+    "name": "Comment systems",
+    "technologiesCount": 8,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      },
+      {
+        "slug": "user-generated-content",
+        "name": "User generated content"
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "slug": "containers",
+    "name": "Containers",
+    "technologiesCount": 3,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 96,
+    "slug": "content-curation",
+    "name": "Content curation",
+    "technologiesCount": 20,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      },
+      {
+        "slug": "user-generated-content",
+        "name": "User generated content"
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "slug": "control-systems",
+    "name": "Control systems",
+    "technologiesCount": 1,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "slug": "cookie-compliance",
+    "name": "Cookie compliance",
+    "technologiesCount": 64,
+    "groups": [
+      {
+        "slug": "privacy",
+        "name": "Privacy"
+      }
+    ]
+  },
+  {
+    "id": 106,
+    "slug": "cross-border-ecommerce",
+    "name": "Cross border ecommerce",
+    "technologiesCount": 13,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "slug": "cryptominers",
+    "name": "Cryptominers",
+    "technologiesCount": 8,
+    "groups": [
+      {
+        "slug": "utilities",
+        "name": "Utilities"
+      }
+    ]
+  },
+  {
+    "id": 97,
+    "slug": "customer-data-platform",
+    "name": "Customer data platform",
+    "technologiesCount": 38,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      },
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "slug": "dms",
+    "name": "DMS",
+    "technologiesCount": 5,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "database-managers",
+    "name": "Database managers",
+    "technologiesCount": 5,
+    "groups": [
+      {
+        "slug": "utilities",
+        "name": "Utilities"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "slug": "databases",
+    "name": "Databases",
+    "technologiesCount": 13,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "slug": "development",
+    "name": "Development",
+    "technologiesCount": 48,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 95,
+    "slug": "digital-asset-management",
+    "name": "Digital asset management",
+    "technologiesCount": 28,
+    "groups": [
+      {
+        "slug": "media",
+        "name": "Media"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "documentation",
+    "name": "Documentation",
+    "technologiesCount": 38,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 109,
+    "slug": "domain-parking",
+    "name": "Domain parking",
+    "technologiesCount": 3,
+    "groups": [
+      {
+        "slug": "other",
+        "name": "Other"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "ecommerce",
+    "name": "Ecommerce",
+    "technologiesCount": 441,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 108,
+    "slug": "ecommerce-frontends",
+    "name": "Ecommerce frontends",
+    "technologiesCount": 10,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "slug": "editors",
+    "name": "Editors",
+    "technologiesCount": 20,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 75,
+    "slug": "email",
+    "name": "Email",
+    "technologiesCount": 45,
+    "groups": [
+      {
+        "slug": "communication",
+        "name": "Communication"
+      },
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 85,
+    "slug": "feature-management",
+    "name": "Feature management",
+    "technologiesCount": 8,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "slug": "feed-readers",
+    "name": "Feed readers",
+    "technologiesCount": 3,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "slug": "font-scripts",
+    "name": "Font scripts",
+    "technologiesCount": 17,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 110,
+    "slug": "form-builders",
+    "name": "Form builders",
+    "technologiesCount": 22,
+    "groups": [
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 107,
+    "slug": "fulfilment",
+    "name": "Fulfilment",
+    "technologiesCount": 6,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 111,
+    "slug": "fundraising-donations",
+    "name": "Fundraising & donations",
+    "technologiesCount": 32,
+    "groups": [
+      {
+        "slug": "other",
+        "name": "Other"
+      }
+    ]
+  },
+  {
+    "id": 79,
+    "slug": "geolocation",
+    "name": "Geolocation",
+    "technologiesCount": 18,
+    "groups": [
+      {
+        "slug": "location",
+        "name": "Location"
+      }
+    ]
+  },
+  {
+    "id": 88,
+    "slug": "hosting",
+    "name": "Hosting",
+    "technologiesCount": 58,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "slug": "hosting-panels",
+    "name": "Hosting panels",
+    "technologiesCount": 10,
+    "groups": [
+      {
+        "slug": "utilities",
+        "name": "Utilities"
+      },
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "slug": "iaas",
+    "name": "IaaS",
+    "technologiesCount": 9,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "slug": "issue-trackers",
+    "name": "Issue trackers",
+    "technologiesCount": 72,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      },
+      {
+        "slug": "user-generated-content",
+        "name": "User generated content"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "slug": "javascript-frameworks",
+    "name": "JavaScript frameworks",
+    "technologiesCount": 76,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "slug": "javascript-graphics",
+    "name": "JavaScript graphics",
+    "technologiesCount": 52,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "slug": "javascript-libraries",
+    "name": "JavaScript libraries",
+    "technologiesCount": 151,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "slug": "lms",
+    "name": "LMS",
+    "technologiesCount": 31,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "slug": "live-chat",
+    "name": "Live chat",
+    "technologiesCount": 155,
+    "groups": [
+      {
+        "slug": "communication",
+        "name": "Communication"
+      },
+      {
+        "slug": "business-tools",
+        "name": "Business tools"
+      }
+    ]
+  },
+  {
+    "id": 103,
+    "slug": "livestreaming",
+    "name": "Livestreaming",
+    "technologiesCount": 19,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      },
+      {
+        "slug": "media",
+        "name": "Media"
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "slug": "load-balancers",
+    "name": "Load balancers",
+    "technologiesCount": 4,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 84,
+    "slug": "loyalty-rewards",
+    "name": "Loyalty & rewards",
+    "technologiesCount": 22,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "slug": "maps",
+    "name": "Maps",
+    "technologiesCount": 22,
+    "groups": [
+      {
+        "slug": "location",
+        "name": "Location"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "slug": "marketing-automation",
+    "name": "Marketing automation",
+    "technologiesCount": 193,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "slug": "media-servers",
+    "name": "Media servers",
+    "technologiesCount": 2,
+    "groups": [
+      {
+        "slug": "media",
+        "name": "Media"
+      },
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "message-boards",
+    "name": "Message boards",
+    "technologiesCount": 35,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      },
+      {
+        "slug": "communication",
+        "name": "Communication"
+      },
+      {
+        "slug": "user-generated-content",
+        "name": "User generated content"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "slug": "miscellaneous",
+    "name": "Miscellaneous",
+    "technologiesCount": 100,
+    "groups": [
+      {
+        "slug": "other",
+        "name": "Other"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "slug": "mobile-frameworks",
+    "name": "Mobile frameworks",
+    "technologiesCount": 8,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "slug": "network-devices",
+    "name": "Network devices",
+    "technologiesCount": 1,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "slug": "network-storage",
+    "name": "Network storage",
+    "technologiesCount": 3,
+    "groups": [
+      {
+        "slug": "media",
+        "name": "Media"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "slug": "operating-systems",
+    "name": "Operating systems",
+    "technologiesCount": 19,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "slug": "paas",
+    "name": "PaaS",
+    "technologiesCount": 53,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "slug": "page-builders",
+    "name": "Page builders",
+    "technologiesCount": 126,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "slug": "payment-processors",
+    "name": "Payment processors",
+    "technologiesCount": 132,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 92,
+    "slug": "performance",
+    "name": "Performance",
+    "technologiesCount": 50,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 76,
+    "slug": "personalisation",
+    "name": "Personalisation",
+    "technologiesCount": 123,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "photo-galleries",
+    "name": "Photo galleries",
+    "technologiesCount": 19,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      },
+      {
+        "slug": "media",
+        "name": "Media"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "slug": "programming-languages",
+    "name": "Programming languages",
+    "technologiesCount": 27,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 78,
+    "slug": "rum",
+    "name": "RUM",
+    "technologiesCount": 27,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 101,
+    "slug": "recruitment-staffing",
+    "name": "Recruitment & staffing",
+    "technologiesCount": 31,
+    "groups": [
+      {
+        "slug": "other",
+        "name": "Other"
+      },
+      {
+        "slug": "business-tools",
+        "name": "Business tools"
+      }
+    ]
+  },
+  {
+    "id": 94,
+    "slug": "referral-marketing",
+    "name": "Referral marketing",
+    "technologiesCount": 16,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      },
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "slug": "remote-access",
+    "name": "Remote access",
+    "technologiesCount": 8,
+    "groups": [
+      {
+        "slug": "communication",
+        "name": "Communication"
+      }
+    ]
+  },
+  {
+    "id": 93,
+    "slug": "reservations-delivery",
+    "name": "Reservations & delivery",
+    "technologiesCount": 47,
+    "groups": [
+      {
+        "slug": "booking",
+        "name": "Booking"
+      }
+    ]
+  },
+  {
+    "id": 77,
+    "slug": "retargeting",
+    "name": "Retargeting",
+    "technologiesCount": 18,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "slug": "returns",
+    "name": "Returns",
+    "technologiesCount": 12,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "slug": "reverse-proxies",
+    "name": "Reverse proxies",
+    "technologiesCount": 9,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 90,
+    "slug": "reviews",
+    "name": "Reviews",
+    "technologiesCount": 56,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      },
+      {
+        "slug": "user-generated-content",
+        "name": "User generated content"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "slug": "rich-text-editors",
+    "name": "Rich text editors",
+    "technologiesCount": 11,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "slug": "seo",
+    "name": "SEO",
+    "technologiesCount": 13,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "slug": "ssl-tls-certificate-authorities",
+    "name": "SSL/TLS certificate authorities",
+    "technologiesCount": 7,
+    "groups": [
+      {
+        "slug": "security",
+        "name": "Security"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "slug": "search-engines",
+    "name": "Search engines",
+    "technologiesCount": 44,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "slug": "security",
+    "name": "Security",
+    "technologiesCount": 73,
+    "groups": [
+      {
+        "slug": "security",
+        "name": "Security"
+      }
+    ]
+  },
+  {
+    "id": 86,
+    "slug": "segmentation",
+    "name": "Segmentation",
+    "technologiesCount": 10,
+    "groups": [
+      {
+        "slug": "marketing",
+        "name": "Marketing"
+      }
+    ]
+  },
+  {
+    "id": 99,
+    "slug": "shipping-carriers",
+    "name": "Shipping carriers",
+    "technologiesCount": 65,
+    "groups": [
+      {
+        "slug": "sales",
+        "name": "Sales"
+      }
+    ]
+  },
+  {
+    "id": 100,
+    "slug": "shopify-apps",
+    "name": "Shopify apps",
+    "technologiesCount": 160,
+    "groups": [
+      {
+        "slug": "add-ons",
+        "name": "Add-ons"
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "slug": "static-site-generator",
+    "name": "Static site generator",
+    "technologiesCount": 27,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "slug": "surveys",
+    "name": "Surveys",
+    "technologiesCount": 25,
+    "groups": [
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "slug": "tag-managers",
+    "name": "Tag managers",
+    "technologiesCount": 11,
+    "groups": [
+      {
+        "slug": "analytics",
+        "name": "Analytics"
+      }
+    ]
+  },
+  {
+    "id": 104,
+    "slug": "ticket-booking",
+    "name": "Ticket booking",
+    "technologiesCount": 12,
+    "groups": [
+      {
+        "slug": "booking",
+        "name": "Booking"
+      }
+    ]
+  },
+  {
+    "id": 89,
+    "slug": "translation",
+    "name": "Translation",
+    "technologiesCount": 14,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "slug": "ui-frameworks",
+    "name": "UI frameworks",
+    "technologiesCount": 75,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "slug": "user-onboarding",
+    "name": "User onboarding",
+    "technologiesCount": 11,
+    "groups": [
+      {
+        "slug": "other",
+        "name": "Other"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "slug": "video-players",
+    "name": "Video players",
+    "technologiesCount": 33,
+    "groups": [
+      {
+        "slug": "media",
+        "name": "Media"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "slug": "web-frameworks",
+    "name": "Web frameworks",
+    "technologiesCount": 89,
+    "groups": [
+      {
+        "slug": "web-development",
+        "name": "Web development"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "slug": "web-server-extensions",
+    "name": "Web server extensions",
+    "technologiesCount": 13,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "slug": "web-servers",
+    "name": "Web servers",
+    "technologiesCount": 92,
+    "groups": [
+      {
+        "slug": "servers",
+        "name": "Servers"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "slug": "webmail",
+    "name": "Webmail",
+    "technologiesCount": 12,
+    "groups": [
+      {
+        "slug": "communication",
+        "name": "Communication"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "widgets",
+    "name": "Widgets",
+    "technologiesCount": 150,
+    "groups": [
+      {
+        "slug": "other",
+        "name": "Other"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "slug": "wikis",
+    "name": "Wikis",
+    "technologiesCount": 13,
+    "groups": [
+      {
+        "slug": "content",
+        "name": "Content"
+      }
+    ]
+  },
+  {
+    "id": 87,
+    "slug": "wordpress-plugins",
+    "name": "WordPress plugins",
+    "technologiesCount": 194,
+    "groups": [
+      {
+        "slug": "add-ons",
+        "name": "Add-ons"
+      }
+    ]
+  },
+  {
+    "id": 80,
+    "slug": "wordpress-themes",
+    "name": "WordPress themes",
+    "technologiesCount": 146,
+    "groups": [
+      {
+        "slug": "add-ons",
+        "name": "Add-ons"
+      }
+    ]
+  }
+]

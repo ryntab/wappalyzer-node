@@ -1,0 +1,31 @@
+{
+  "name": "@ryntab/wappalyzer-node",
+  "version": "4.4.7",
+  "description": "A node.js wrapper for Wappalyzer",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryntab/wappalyzer-wrapper"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "upload-icons": "node upload-images.js"
+  },
+  "author": "ryntab",
+  "homepage": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1664.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.4.5",
+    "mime": "^4.0.4",
+    "node-fetch": "^3.3.2",
+    "puppeteer": "^22.13.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "user-agents": "^1.1.274"
+  },
+  "devDependencies": {
+    "wappalyzer": "^6.7.9"
+  }
+}
