@@ -1,6 +1,6 @@
 {
   "name": "@ryntab/wappalyzer-node",
-  "version": "4.4.7",
+  "version": "2.0.0",
   "description": "A node.js wrapper for Wappalyzer",
   "type": "module",
   "repository": {
@@ -24,8 +24,5 @@
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "user-agents": "^1.1.274"
-  },
-  "devDependencies": {
-    "wappalyzer": "^6.7.9"
   }
 }

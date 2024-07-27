@@ -3,6 +3,7 @@ import { extractTechnologies } from "./src/scrape.js";
 import { load_technologies } from "./src/technologies/__loader.js";
 import categories from "./src/categories.json" assert { type: "json" };
 import Wappalyzer from "./src/wappalyzer.js";
+import fs from "fs";
 
 /**
  * Analyzes the given payload to identify technologies used on a webpage.
@@ -67,11 +68,14 @@ const analyze = async (payload) => {
  * @returns {Promise<Object>} A promise that resolves to the identified technologies.
  * @throws {Error} Throws an error if the scan or analysis fails.
  */
-const scan = async (url, config = {
-  browser: {
-    headless: false,
+const scan = async (
+  url,
+  config = {
+    browser: {
+      headless: false,
+    },
   }
-}) => {
+) => {
   const techLib = await load_technologies();
   await Wappalyzer.setTechnologies(techLib);
   await Wappalyzer.setCategories(categories);
