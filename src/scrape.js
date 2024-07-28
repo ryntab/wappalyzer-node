@@ -5,6 +5,7 @@ import UserAgent from "user-agents";
 import * as cheerio from "cheerio";
 import dns from "dns/promises";
 import https from 'https';
+import Wappalyzer from './wappalyzer.js';
 
 const chromiumArgs = [
     "--no-sandbox",
@@ -69,10 +70,8 @@ const puppeteerFetch = async (url, config, browserInstance) => {
         const HTML = await page.content();
         const cookies = await page.cookies();
         const headers = mainResponse ? mainResponse.headers() : {};
-        if (!browserInstance) {
-            await browser.close();
-        }
-        return { HTML, cookies, headers, certIssuer };
+        
+        return { HTML, cookies, headers, certIssuer, page, browser };
     } catch (error) {
         console.error(`Puppeteer fetch error: ${error.message}`);
         throw error;
@@ -114,7 +113,6 @@ const basicFetch = async (url) => {
     }
 };
 
-
 /**
  * Fetches the content of multiple CSS files.
  * 
@@ -144,6 +142,29 @@ const fetchCSSContent = async (cssUrls) => {
     }
 };
 
+const fetchJSContent = async (scriptUrls) => {
+    // Create a custom agent that ignores SSL certificate errors
+    const agent = new https.Agent({
+        rejectUnauthorized: false,
+    });
+
+    try {
+        const jsContents = await Promise.all(
+            scriptUrls.map(async (url) => {
+                const response = await fetch(url, { agent });
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch JS: ${response.status}`);
+                }
+                return await response.text();
+            })
+        );
+        return jsContents.join("\n");
+    } catch (error) {
+        console.error(`JS fetch error: ${error.message}`);
+        throw error;
+    }
+};
+
 /**
  * Fetches the HTML content of a webpage, using either Puppeteer or basic fetch based on configuration.
  * 
@@ -154,14 +175,16 @@ const fetchCSSContent = async (cssUrls) => {
 const getHTML = async (url, config) => {
     if (!url) throw new Error("No URL provided");
 
+    console.log(`Fetching URL: ${url}`, config);
+
     async function targetBrowserFetch() {
         try {
-            const { HTML, cookies, headers, certIssuer } = await puppeteerFetch(
+            const { HTML, cookies, headers, certIssuer, page, browser } = await puppeteerFetch(
                 url,
                 config
             );
             const $ = cheerio.load(HTML);
-            return { $, HTML, headers, cookies, certIssuer };
+            return { $, HTML, headers, cookies, certIssuer, page, browser };
         } catch (error) {
             console.error(
                 `Puppeteer fetch failed, falling back to basic fetch. Error: ${error.message}`
@@ -174,7 +197,7 @@ const getHTML = async (url, config) => {
         try {
             const { HTML, headers, cookies } = await basicFetch(url);
             const $ = cheerio.load(HTML);
-            return { $, HTML, headers, cookies, certIssuer: null };
+            return { $, HTML, headers, cookies, certIssuer: null, page: null, browser: null };
         } catch (error) {
             console.error(`Failed to fetch HTML: ${error.message}`);
             throw error;
@@ -189,6 +212,64 @@ const getHTML = async (url, config) => {
 };
 
 /**
+ * Injects a script into the Puppeteer page context.
+ * 
+ * @param {Object} page - The Puppeteer page instance.
+ * @param {string} src - The script source URL.
+ * @param {string} id - The ID to identify the script's message.
+ * @param {Object} message - The message to send to the injected script.
+ * @returns {Promise<Object>} - The result of the script execution.
+ */
+const inject = (page, src, id, message) => {
+    return new Promise((resolve) => {
+        page.evaluate(({ src, id, message }) => {
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+
+                script.onload = () => {
+                    const onMessage = ({ data }) => {
+                        if (!data.wappalyzer || !data.wappalyzer[id]) {
+                            return;
+                        }
+
+                        window.removeEventListener('message', onMessage);
+
+                        resolve(data.wappalyzer[id]);
+
+                        script.remove();
+                    };
+
+                    window.addEventListener('message', onMessage);
+
+                    window.postMessage({
+                        wappalyzer: message,
+                    });
+                };
+
+                script.setAttribute('src', src);
+
+                document.body.appendChild(script);
+            });
+        }, { src, id, message }).then(resolve);
+    });
+};
+
+/**
+ * Gets JavaScript-based technologies using Puppeteer.
+ * 
+ * @param {Object} page - The Puppeteer page instance.
+ * @param {Array} technologies - The technologies to analyze.
+ * @returns {Promise<Array>} - The detected technologies.
+ */
+const getJs = async (page, technologies) => {
+    return inject(page, 'js/js.js', 'js', {
+        technologies: technologies
+            .filter(({ js }) => Object.keys(js).length)
+            .map(({ name, js }) => ({ name, chains: Object.keys(js) })),
+    });
+};
+
+/**
  * Extracts technologies and other relevant data from a webpage.
  * 
  * @param {string} url - The URL of the webpage to extract data from.
@@ -197,14 +278,10 @@ const getHTML = async (url, config) => {
  */
 const extractTechnologies = async (
     url,
-    config = {
-        browser: {
-            headless: false,
-        },
-    }
+    config
 ) => {
     try {
-        const { $, HTML, headers, cookies, certIssuer } = await getHTML(
+        const { $, HTML, headers, cookies, certIssuer, page, browser } = await getHTML(
             url,
             config
         );
@@ -231,6 +308,7 @@ const extractTechnologies = async (
         });
 
         const externalCssContent = await fetchCSSContent(cssUrls);
+        const externalJsContent = await fetchJSContent(scriptSrc);
 
         const inlineStyles = [];
         $("style").each((i, elem) => inlineStyles.push($(elem).html()));
@@ -277,10 +355,17 @@ const extractTechnologies = async (
             console.error(`DNS lookup error: ${error.message}`);
         }
 
+        // const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies): [];
+
+        if (browser) {
+            await browser.close();
+        }
+
         return {
             url,
             meta,
             scriptSrc,
+            js: externalJsContent,
             scripts: inlineScripts,
             css: cssContent,
             html: HTML,
@@ -290,12 +375,20 @@ const extractTechnologies = async (
                 txt: dnsRecords.TXT,
                 mx: dnsRecords.MX,
             },
+            text: externalJsContent,
             certIssuer,
+            dom: $,
+            // jsTechnologies
         };
     } catch (error) {
         console.error(`Error extracting data: ${error.message}`);
         throw error;
     }
 };
+
+// Example usage:
+// const { dom, jsTechnologies } = await extractTechnologies(url, config);
+// const results = await analyzeDom(url, dom, requires, categoryRequires);
+// console.log(results, jsTechnologies);
 
 export { getHTML, extractTechnologies };

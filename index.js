@@ -16,8 +16,9 @@ const initialize = async () => {
 };
 
 const defaultConfig = {
+  target: "browser",
   browser: {
-    headless: true,
+    headless: false,
   },
 };
 
@@ -82,7 +83,9 @@ const analyze = async (payload) => {
       cookies,
       meta,
       dns,
+      text,
       certIssuer,
+      dom,
     } = payload;
 
     return await wappalyzer.analyze({
@@ -95,6 +98,7 @@ const analyze = async (payload) => {
       cookies,
       meta,
       dns,
+      text,
       certIssuer,
     });
   } catch (error) {
@@ -120,6 +124,32 @@ const scan = async (
 
   try {
     const technologies = await extractTechnologies(url, config);
+    const { dom } = technologies;
+
+    // Analyze JavaScript variables
+    const jsAnalysis = Wappalyzer.analyzeJs(
+      url,
+      dom,
+      technologies.js,
+      Wappalyzer.requires,
+      Wappalyzer.categoryRequires
+    );
+
+    // // Analyze DOM nodes
+    const domAnalysis = await Wappalyzer.analyzeDom(
+      url,
+      dom,
+      Wappalyzer.requires,
+      Wappalyzer.categoryRequires
+    );
+
+    // console.log(domAnalysis)
+    // console.log(jsAnalysis);
+
+    // Combine results
+    // const combinedResults = [...jsAnalysis, ...domAnalysis];
+    // console.log(domAnalysis);
+    // console.log(technologies);
     const parsedTechnologies = await analyze(technologies);
     return await wappalyzer.resolve(parsedTechnologies);
   } catch (error) {
@@ -152,5 +182,13 @@ const scanWithQueue = (url, config = defaultConfig) => {
     });
   });
 };
+
+
+const test = async () => {
+  const res = await scan("https://fugamo.de/");
+  // console.log(res);
+}
+
+test();
 
 export { analyze, scan, scanWithQueue };
