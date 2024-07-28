@@ -3699,8 +3699,11 @@
     },
     "icon": "ProcessWire.svg",
     "implies": "PHP",
-    "js": {
-      "ProcessWire": ""
+    "meta": {
+      "generator": "ProcessWire"
+    },
+    "cookies": {
+      "wire": ""
     },
     "oss": true,
     "website": "https://processwire.com/"
