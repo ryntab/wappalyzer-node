@@ -4,6 +4,51 @@ import { load_technologies } from "./src/technologies/__loader.js";
 import categories from "./src/categories.json" assert { type: "json" };
 import Wappalyzer from "./src/wappalyzer.js";
 
+let isInitialized = false;
+
+const initialize = async () => {
+  if (!isInitialized) {
+    const techLib = await load_technologies();
+    await Wappalyzer.setTechnologies(techLib);
+    await Wappalyzer.setCategories(categories);
+    isInitialized = true;
+  }
+};
+
+const defaultConfig = {
+  browser: {
+    headless: true,
+  },
+};
+
+class Queue {
+  constructor(concurrency) {
+    this.concurrency = concurrency;
+    this.running = 0;
+    this.queue = [];
+  }
+
+  push(task) {
+    this.queue.push(task);
+    this.run();
+  }
+
+  async run() {
+    if (this.running >= this.concurrency || this.queue.length === 0) {
+      return;
+    }
+
+    const task = this.queue.shift();
+    this.running++;
+    await task();
+    this.running--;
+    this.run();
+  }
+}
+
+// Create an instance of the Queue class with a concurrency level of 2
+const queue = new Queue(1);
+
 /**
  * Analyzes the given payload to identify technologies used on a webpage.
  *
@@ -69,15 +114,9 @@ const analyze = async (payload) => {
  */
 const scan = async (
   url,
-  config = {
-    browser: {
-      headless: false,
-    },
-  }
+  config = defaultConfig
 ) => {
-  const techLib = await load_technologies();
-  await Wappalyzer.setTechnologies(techLib);
-  await Wappalyzer.setCategories(categories);
+  await initialize();
 
   try {
     const technologies = await extractTechnologies(url, config);
@@ -89,4 +128,29 @@ const scan = async (
   }
 };
 
-export { analyze, scan };
+/**
+ * Queues a scan for the given URL and ensures that no more than the specified
+ * number of concurrent scans are running at any time.
+ *
+ * @function scanWithQueue
+ * @param {string} url - The URL of the website to scan.
+ * @param {Object} [config] - The configuration options for scanning.
+ * @param {Object} [config.browser] - The browser configuration options.
+ * @param {boolean} [config.browser.headless=false] - Whether to run the browser in headless mode.
+ * @returns {Promise<Object>} A promise that resolves to the identified technologies.
+ * @throws {Error} Throws an error if the scan or analysis fails.
+ */
+const scanWithQueue = (url, config = defaultConfig) => {
+  return new Promise((resolve, reject) => {
+    queue.push(async () => {
+      try {
+        const result = await scan(url, config);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+};
+
+export { analyze, scan, scanWithQueue };

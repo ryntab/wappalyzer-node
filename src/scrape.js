@@ -4,6 +4,7 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import UserAgent from "user-agents";
 import * as cheerio from "cheerio";
 import dns from "dns/promises";
+import https from 'https';
 
 const chromiumArgs = [
     "--no-sandbox",
@@ -13,6 +14,14 @@ const chromiumArgs = [
     "--allow-running-insecure-content",
     "--disable-web-security",
 ];
+
+const agent = new https.Agent({
+    rejectUnauthorized: false,
+});
+
+const fetchWithAgent = (url, options = {}) => {
+    return fetch(url, { ...options, agent });
+};
 
 /**
  * Fetches a webpage using Puppeteer and returns the HTML content, cookies, headers, and certificate issuer.
@@ -36,7 +45,7 @@ const puppeteerFetch = async (url, config, browserInstance) => {
         await page.setRequestInterception(true);
         page.on('request', (req) => {
             const resourceType = req.resourceType();
-            if (resourceType === 'image' ||  resourceType === 'font') {
+            if (resourceType === 'image' || resourceType === 'font') {
                 req.abort();
             } else {
                 req.continue();
@@ -77,10 +86,16 @@ const puppeteerFetch = async (url, config, browserInstance) => {
  * @returns {Promise<Object>} - An object containing the HTML content, headers, and cookies.
  */
 const basicFetch = async (url) => {
+    // Create a custom agent that ignores SSL certificate errors
+    const agent = new https.Agent({
+        rejectUnauthorized: false,
+    });
+
     try {
         const userAgent = new UserAgent();
         const response = await fetch(url, {
             headers: { "User-Agent": userAgent.toString() },
+            agent, // Use the custom agent
         });
         if (!response.ok) {
             throw new Error(`Response error: ${response.status}`);
@@ -99,6 +114,7 @@ const basicFetch = async (url) => {
     }
 };
 
+
 /**
  * Fetches the content of multiple CSS files.
  * 
@@ -106,10 +122,15 @@ const basicFetch = async (url) => {
  * @returns {Promise<string>} - A concatenated string of CSS contents.
  */
 const fetchCSSContent = async (cssUrls) => {
+    // Create a custom agent that ignores SSL certificate errors
+    const agent = new https.Agent({
+        rejectUnauthorized: false,
+    });
+
     try {
         const cssContents = await Promise.all(
             cssUrls.map(async (url) => {
-                const response = await fetch(url);
+                const response = await fetch(url, { agent });
                 if (!response.ok) {
                     throw new Error(`Failed to fetch CSS: ${response.status}`);
                 }
@@ -161,9 +182,9 @@ const getHTML = async (url, config) => {
     }
 
     if (config.target === "browser") {
-        return targetBrowserFetch();
+        return await targetBrowserFetch();
     } else {
-        return targetBasicFetch();
+        return await targetBasicFetch();
     }
 };
 
@@ -178,7 +199,7 @@ const extractTechnologies = async (
     url,
     config = {
         browser: {
-            headless: true,
+            headless: false,
         },
     }
 ) => {
@@ -247,10 +268,11 @@ const extractTechnologies = async (
         });
 
         const hostname = new URL(url).hostname;
+        const reducedHostName = hostname.replace(/^www\./, "").replace(/^http\./, "").replace(/^https\./, "");
         const dnsRecords = { TXT: [], MX: [] };
         try {
-            dnsRecords.TXT = await dns.resolveTxt(hostname);
-            dnsRecords.MX = await dns.resolveMx(hostname);
+            dnsRecords.TXT = await dns.resolveTxt(reducedHostName);
+            dnsRecords.MX = await dns.resolveMx(reducedHostName);
         } catch (error) {
             console.error(`DNS lookup error: ${error.message}`);
         }
