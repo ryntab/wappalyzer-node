@@ -6,6 +6,7 @@ import * as cheerio from "cheerio";
 import dns from "dns/promises";
 import https from 'https';
 import Wappalyzer from './wappalyzer.js';
+import Wordpress_Helpers from "./helpers/Wordpress.js";
 
 const chromiumArgs = [
     "--no-sandbox",
@@ -15,14 +16,6 @@ const chromiumArgs = [
     "--allow-running-insecure-content",
     "--disable-web-security",
 ];
-
-const agent = new https.Agent({
-    rejectUnauthorized: false,
-});
-
-const fetchWithAgent = (url, options = {}) => {
-    return fetch(url, { ...options, agent });
-};
 
 /**
  * Fetches a webpage using Puppeteer and returns the HTML content, cookies, headers, and certificate issuer.
@@ -142,6 +135,12 @@ const fetchCSSContent = async (cssUrls) => {
     }
 };
 
+/**
+ * Fetches the content of multiple JS files.
+ * 
+ * @param {string[]} jsUrls - An array of JS file URLs.
+ * @returns {Promise<string>} - A concatenated string of JS contents.
+ */
 const fetchJSContent = async (scriptUrls) => {
     // Create a custom agent that ignores SSL certificate errors
     const agent = new https.Agent({
@@ -261,6 +260,11 @@ const extractTechnologies = async (
             config
         );
 
+        const wordpress = await Wordpress_Helpers.scan({
+            url,
+            dom: $,
+        });
+
         const baseUrl = new URL(url);
 
         const scriptSrc = [];
@@ -353,6 +357,9 @@ const extractTechnologies = async (
             text: externalJsContent,
             certIssuer,
             dom: $,
+            helpers: [
+                wordpress,
+            ]
             // jsTechnologies
         };
     } catch (error) {
