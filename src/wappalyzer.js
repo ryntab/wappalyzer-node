@@ -98,6 +98,12 @@ const Wappalyzer = {
   getRequiredTechnologies: (requires, categoryRequires) => {
     const requiredTechnologies = new Set();
 
+    console.log(requires, categoryRequires);
+
+    if (!requires || requires.length === 0) {
+      return
+    };
+
     requires.forEach((requirement) => {
       const technology = Wappalyzer.getTechnology(requirement.name);
       if (technology) {
@@ -152,8 +158,8 @@ const Wappalyzer = {
               confidence = Math.min(100, confidence + pattern.confidence);
               version =
                 _version.length > version.length &&
-                _version.length <= 15 &&
-                (parseInt(_version, 10) || 0) < 10000 // Ignore long numeric strings like timestamps
+                  _version.length <= 15 &&
+                  (parseInt(_version, 10) || 0) < 10000 // Ignore long numeric strings like timestamps
                   ? _version
                   : version;
               rootPath = rootPath || _rootPath || undefined;
@@ -417,9 +423,9 @@ const Wappalyzer = {
         dom: transform(
           typeof dom === "string" || Array.isArray(dom)
             ? toArray(dom).reduce(
-                (dom, selector) => ({ ...dom, [selector]: { exists: "" } }),
-                {}
-              )
+              (dom, selector) => ({ ...dom, [selector]: { exists: "" } }),
+              {}
+            )
             : dom,
           true,
           false
@@ -578,13 +584,13 @@ const Wappalyzer = {
             attrs.regex = new RegExp(
               isRegex
                 ? attr
-                    // Escape slashes
-                    .replace(/\//g, "\\/")
-                    // Optimise quantifiers for long strings
-                    .replace(/\\\+/g, "__escapedPlus__")
-                    .replace(/\+/g, "{1,250}")
-                    .replace(/\*/g, "{0,250}")
-                    .replace(/__escapedPlus__/g, "\\+")
+                  // Escape slashes
+                  .replace(/\//g, "\\/")
+                  // Optimise quantifiers for long strings
+                  .replace(/\\\+/g, "__escapedPlus__")
+                  .replace(/\+/g, "{1,250}")
+                  .replace(/\*/g, "{0,250}")
+                  .replace(/__escapedPlus__/g, "\\+")
                 : "",
               "i"
             );
@@ -733,8 +739,8 @@ const Wappalyzer = {
 
         return technology
           ? Wappalyzer.analyzeManyToMany(technology, "js", {
-              [chain]: [value],
-            })
+            [chain]: [value],
+          })
           : [];
       })
       .flat();

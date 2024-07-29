@@ -221,37 +221,7 @@ const getHTML = async (url, config) => {
  * @returns {Promise<Object>} - The result of the script execution.
  */
 const inject = (page, src, id, message) => {
-    return new Promise((resolve) => {
-        page.evaluate(({ src, id, message }) => {
-            return new Promise((resolve) => {
-                const script = document.createElement('script');
-
-                script.onload = () => {
-                    const onMessage = ({ data }) => {
-                        if (!data.wappalyzer || !data.wappalyzer[id]) {
-                            return;
-                        }
-
-                        window.removeEventListener('message', onMessage);
-
-                        resolve(data.wappalyzer[id]);
-
-                        script.remove();
-                    };
-
-                    window.addEventListener('message', onMessage);
-
-                    window.postMessage({
-                        wappalyzer: message,
-                    });
-                };
-
-                script.setAttribute('src', src);
-
-                document.body.appendChild(script);
-            });
-        }, { src, id, message }).then(resolve);
-    });
+    return
 };
 
 /**
@@ -262,11 +232,16 @@ const inject = (page, src, id, message) => {
  * @returns {Promise<Array>} - The detected technologies.
  */
 const getJs = async (page, technologies) => {
-    return inject(page, 'js/js.js', 'js', {
-        technologies: technologies
-            .filter(({ js }) => Object.keys(js).length)
-            .map(({ name, js }) => ({ name, chains: Object.keys(js) })),
-    });
+    try {
+        return inject(page, 'js/js.js', 'js', {
+            technologies: technologies
+                .filter(({ js }) => Object.keys(js).length)
+                .map(({ name, js }) => ({ name, chains: Object.keys(js) })),
+        });
+    } catch (error) {
+        console.error(`Error getting JS technologies: ${error.message}`);
+        return [];
+    }
 };
 
 /**
@@ -355,7 +330,7 @@ const extractTechnologies = async (
             console.error(`DNS lookup error: ${error.message}`);
         }
 
-        // const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies): [];
+        const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies): [];
 
         if (browser) {
             await browser.close();

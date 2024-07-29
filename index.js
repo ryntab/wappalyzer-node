@@ -100,6 +100,7 @@ const analyze = async (payload) => {
       dns,
       text,
       certIssuer,
+      dom,
     });
   } catch (error) {
     console.error("Error during analysis:", error);
@@ -126,22 +127,28 @@ const scan = async (
     const technologies = await extractTechnologies(url, config);
     const { dom } = technologies;
 
-    // Analyze JavaScript variables
-    const jsAnalysis = Wappalyzer.analyzeJs(
-      url,
-      dom,
-      technologies.js,
-      Wappalyzer.requires,
-      Wappalyzer.categoryRequires
-    );
+    console.log(dom)
 
-    // // Analyze DOM nodes
-    const domAnalysis = await Wappalyzer.analyzeDom(
-      url,
-      dom,
-      Wappalyzer.requires,
-      Wappalyzer.categoryRequires
-    );
+    // Analyze JavaScript variables
+    // const jsAnalysis = Wappalyzer.analyzeJs(
+    //   url,
+    //   dom,
+    //   technologies.js,
+    //   Wappalyzer.requires,
+    //   Wappalyzer.categoryRequires
+    // );
+
+    // // // Analyze DOM nodes
+    // const domAnalysis = await Wappalyzer.analyzeDom(
+    //   url,
+    //   dom,
+    //   Wappalyzer.requires,
+    //   Wappalyzer.categoryRequires
+    // );
+
+
+
+    // console.log(domAnalysis);
 
     // console.log(domAnalysis)
     // console.log(jsAnalysis);
@@ -186,7 +193,7 @@ const scanWithQueue = (url, config = defaultConfig) => {
 
 const test = async () => {
   const res = await scan("https://fugamo.de/");
-  // console.log(res);
+  console.log(res);
 }
 
 test();
