@@ -16,8 +16,9 @@ const initialize = async () => {
 };
 
 const defaultConfig = {
+  // target: "browser",
   browser: {
-    headless: true,
+    headless: false,
   },
 };
 
@@ -82,10 +83,13 @@ const analyze = async (payload) => {
       cookies,
       meta,
       dns,
+      text,
       certIssuer,
+      dom,
+      helpers,
     } = payload;
 
-    return await wappalyzer.analyze({
+    const analysis = await wappalyzer.analyze({
       url,
       html,
       css,
@@ -95,8 +99,18 @@ const analyze = async (payload) => {
       cookies,
       meta,
       dns,
+      text,
       certIssuer,
+      dom,
+      helpers
     });
+
+    // Append helper functions to the analysis
+    return {
+      analysis,
+      helpers,
+    };
+
   } catch (error) {
     console.error("Error during analysis:", error);
     throw new Error("Failed to analyze technologies");
@@ -112,16 +126,39 @@ const analyze = async (payload) => {
  * @returns {Promise<Object>} A promise that resolves to the identified technologies.
  * @throws {Error} Throws an error if the scan or analysis fails.
  */
-const scan = async (
-  url,
-  config = defaultConfig
-) => {
+const scan = async (url, config = defaultConfig) => {
   await initialize();
 
   try {
     const technologies = await extractTechnologies(url, config);
-    const parsedTechnologies = await analyze(technologies);
-    return await wappalyzer.resolve(parsedTechnologies);
+
+    // const { dom } = technologies;
+
+    // Analyze JavaScript variables
+    // const jsAnalysis = Wappalyzer.analyzeJs(
+    //   url,
+    //   dom,
+    //   technologies.js,
+    //   Wappalyzer.requires,
+    //   Wappalyzer.categoryRequires
+    // );
+
+    // // // Analyze DOM nodes
+    // const domAnalysis = await Wappalyzer.analyzeDom(
+    //   url,
+    //   dom,
+    //   Wappalyzer.requires,
+    //   Wappalyzer.categoryRequires
+    // );
+
+    const { analysis, helpers} = await analyze(technologies);
+
+    const resolvedTechnologies = await wappalyzer.resolve({
+      detections: analysis,
+      helpers,
+    });
+    
+    return resolvedTechnologies;
   } catch (error) {
     console.error("Error during scan:", error);
     throw new Error("Failed to scan and analyze technologies");
@@ -152,5 +189,13 @@ const scanWithQueue = (url, config = defaultConfig) => {
     });
   });
 };
+
+const test = async () => {
+  // const res = await scan("https://fugamo.de/");
+  const res = await scan("https://www.tentree.ca/");
+  console.log(res);
+};
+
+test();
 
 export { analyze, scan, scanWithQueue };
