@@ -246,7 +246,7 @@ const Wordpress_Helpers = {
         const end = performance.now();
 
         return {
-            helper: 'Wordpress',
+            name: 'WordPress',
             domain,
             hasHome,
             plugins,
