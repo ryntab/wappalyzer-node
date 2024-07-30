@@ -3,6 +3,7 @@ src/icons/
 
 # Exclude other common directories and files
 node_modules/
+docs/
 dist/
 build/
 coverage/
