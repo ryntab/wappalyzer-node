@@ -2,4 +2,4 @@
 
 I'm a full stack developer...
 
-[![Example]("/docs/example.gif")
+![Example]("/docs/example.gif")
