@@ -190,11 +190,4 @@ const scanWithQueue = (url, config = defaultConfig) => {
   });
 };
 
-// const test = async () => {
-//   // const res = await scan("https://fugamo.de/");
-//   const res = await scan("https://www.tentree.ca/");
-//   console.log(res);
-// };
-// test();
-
 export { analyze, scan, scanWithQueue };

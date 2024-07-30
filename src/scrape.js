@@ -125,7 +125,7 @@ const fetchCSSContent = async (cssUrls) => {
             cssUrls.map(async (url) => {
                 const response = await fetch(url, { agent });
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch CSS: ${response.status}`);
+                    console.error(`Failed to fetch CSS: ${response.status}`);
                 }
                 return await response.text();
             })
@@ -156,10 +156,9 @@ const fetchJSContent = async (scriptUrls) => {
                 if (url.startsWith('blob:')) {
                     return '';
                 }
-
                 const response = await fetch(url, { agent });
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch JS: ${response.status}`);
+                    console.error(`Failed to fetch JS: ${response.status}`);
                 }
                 return await response.text();
             })
