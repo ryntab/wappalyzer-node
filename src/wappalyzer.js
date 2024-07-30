@@ -907,9 +907,6 @@ const Wappalyzer = {
     return results;
   },
 
-  // Example usage:
-  // const { dom } = await extractTechnologies(url, config);
-  // const results = analyzeDom(url, dom, requires, categoryRequires);
 };
 
 if (typeof module !== "undefined") {

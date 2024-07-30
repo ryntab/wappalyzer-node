@@ -134,10 +134,6 @@ const scan = async (url, config = defaultConfig) => {
 
     // const { dom } = technologies;
 
-    // console.log(technologies);
-
-    // console.log(dom)
-
     // Analyze JavaScript variables
     // const jsAnalysis = Wappalyzer.analyzeJs(
     //   url,
@@ -155,15 +151,6 @@ const scan = async (url, config = defaultConfig) => {
     //   Wappalyzer.categoryRequires
     // );
 
-    // console.log(domAnalysis);
-
-    // console.log(domAnalysis)
-    // console.log(jsAnalysis);
-
-    // Combine results
-    // const combinedResults = [...jsAnalysis, ...domAnalysis];
-    // console.log(domAnalysis);
-    // console.log(technologies);
     const { analysis, helpers} = await analyze(technologies);
 
     const resolvedTechnologies = await wappalyzer.resolve({
@@ -205,7 +192,7 @@ const scanWithQueue = (url, config = defaultConfig) => {
 
 const test = async () => {
   // const res = await scan("https://fugamo.de/");
-  const res = await scan("https://hiutdenim.co.uk/");
+  const res = await scan("https://www.tentree.ca/");
   console.log(res);
 };
 

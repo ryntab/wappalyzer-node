@@ -1,8 +1,22 @@
 const Magento_Helpers = {
+    /**
+     * Checks if the given DOM represents a Magento site.
+     *
+     * @param {Object} dom - The DOM object of the webpage.
+     * @returns {boolean} - Returns true if the site is identified as Magento, false otherwise.
+     */
     isMagento(dom) {
         return dom.html().match(/skin\/frontend\/|\/static\//i) !== null;
     },
 
+    /**
+     * Detects Magento themes from the given URL and DOM.
+     *
+     * @param {Object} param0 - An object containing the URL and DOM.
+     * @param {string} param0.url - The URL of the webpage.
+     * @param {Object} param0.dom - The DOM object of the webpage.
+     * @returns {Object|boolean} - Returns an object with the URL, detected themes, and duration, or false if no themes are detected.
+     */
     detectMagentoThemes({ url, dom }) {
         let start = performance.now();
         let themes = [];
@@ -56,6 +70,14 @@ const Magento_Helpers = {
         };
     },
 
+    /**
+     * Scans the given URL and DOM to detect if the site is a Magento site and identifies the themes used.
+     *
+     * @param {Object} param0 - An object containing the URL and DOM.
+     * @param {string} param0.url - The URL of the webpage.
+     * @param {Object} param0.dom - The DOM object of the webpage.
+     * @returns {Object|boolean} - Returns an object with the name 'Magento', detected themes, and duration, or false if the site is not identified as Magento.
+     */
     async scan({ url, dom }) {
         const start = performance.now();
         if (!this.isMagento(dom)) {

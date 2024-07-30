@@ -5,7 +5,7 @@ import UserAgent from "user-agents";
 import * as cheerio from "cheerio";
 import dns from "dns/promises";
 import https from 'https';
-import Wappalyzer from './wappalyzer.js';
+// import Wappalyzer from './wappalyzer.js';
 import Wordpress_Helpers from "./helpers/Wordpress.js";
 import Shopify_Helpers from "./helpers/Shopify.js";
 import Magento_Helpers from "./helpers/Magento.js";
@@ -352,7 +352,7 @@ const extractTechnologies = async (
             console.error(`DNS lookup error: ${error.message}`);
         }
 
-        const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies) : [];
+        // const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies) : [];
 
         if (browser) {
             await browser.close();
@@ -387,10 +387,5 @@ const extractTechnologies = async (
         throw error;
     }
 };
-
-// Example usage:
-// const { dom, jsTechnologies } = await extractTechnologies(url, config);
-// const results = await analyzeDom(url, dom, requires, categoryRequires);
-// console.log(results, jsTechnologies);
 
 export { getHTML, extractTechnologies };
