@@ -1,3 +1,5 @@
+import getDomain from "../utils/getDomain.js";
+
 const Wordpress_Helpers = {
     /**
      * Checks if the DOM represents a WordPress site by searching for common WordPress directories.
@@ -17,7 +19,7 @@ const Wordpress_Helpers = {
      */
     hasHome({ url, dom }) {
         const start = performance.now();
-        let domainPart = this.getDomain(url);
+        let domainPart = getDomain(url);
         let html = dom.html().slice(0, 100000);
         let urlPart = "[A-Za-z0-9/./-/_/]+";
         let httpPart = "[A-Za-z0-9/:/./-/_/]+";
@@ -48,7 +50,7 @@ const Wordpress_Helpers = {
     detectWPPlugins({ url, dom }) {
         let start = performance.now();
         let list = [];
-        let domainPart = this.getDomain(url);
+        let domainPart = getDomain(url);
         let html = dom.html().slice(0, 100000);
         let urlPart = "[A-Za-z0-9/./-/_/]*";
         let httpPart = "[A-Za-z0-9/:/./-/_/]+";
@@ -70,28 +72,6 @@ const Wordpress_Helpers = {
         return {
             url: url,
             list: list,
-            duration: end - start,
-        };
-    },
-
-    /**
-     * Extracts the domain from a URL.
-     * @param {string} url - The URL from which to extract the domain.
-     * @returns {string} - The extracted domain.
-     */
-    getDomain(url) {
-        let hostname;
-        const start = performance.now();
-        if (url.indexOf("//") > -1) {
-            hostname = url.split("/")[2];
-        } else {
-            hostname = url.split("/")[0];
-        }
-        hostname = hostname.split(":")[0];
-        hostname = hostname.split("?")[0];
-        const end = performance.now();
-        return {
-            hostname: hostname,
             duration: end - start,
         };
     },
@@ -232,7 +212,7 @@ const Wordpress_Helpers = {
             return false;
         }
 
-        const { hostname: domain } = this.getDomain(url);
+        const { hostname: domain } = getDomain(url);
         const hasHome = this.hasHome({ url, dom });
         const plugins = this.detectWPPlugins({ url, dom });
 
