@@ -101,8 +101,8 @@ const Wappalyzer = {
     console.log(requires, categoryRequires);
 
     if (!requires || requires.length === 0) {
-      return
-    };
+      return;
+    }
 
     requires.forEach((requirement) => {
       const technology = Wappalyzer.getTechnology(requirement.name);
@@ -132,7 +132,7 @@ const Wappalyzer = {
    * Resolve promises for implied technology.
    * @param {Array} detections
    */
-  resolve(detections = []) {
+  resolve({ detections, helpers }) {
     const resolved = detections.reduce((resolved, { technology, lastUrl }) => {
       if (
         resolved.findIndex(
@@ -158,8 +158,8 @@ const Wappalyzer = {
               confidence = Math.min(100, confidence + pattern.confidence);
               version =
                 _version.length > version.length &&
-                  _version.length <= 15 &&
-                  (parseInt(_version, 10) || 0) < 10000 // Ignore long numeric strings like timestamps
+                _version.length <= 15 &&
+                (parseInt(_version, 10) || 0) < 10000 // Ignore long numeric strings like timestamps
                   ? _version
                   : version;
               rootPath = rootPath || _rootPath || undefined;
@@ -181,7 +181,7 @@ const Wappalyzer = {
         0
       );
 
-    return resolved
+    const sortedResolved = resolved
       .sort((a, b) => (priority(a) > priority(b) ? 1 : -1))
       .map(
         ({
@@ -214,6 +214,22 @@ const Wappalyzer = {
           lastUrl,
         })
       );
+
+    // For each helper join in to the resolved technologies
+    if (helpers) {
+      helpers.forEach((helper) => {
+       // Find the matching technology
+        const resolvedTech = sortedResolved.find(
+          (tech) => tech.name === helper.name
+        );
+
+        if (resolvedTech) {
+          resolvedTech.helper = helper;
+        }
+      });
+    }
+
+    return sortedResolved;
   },
 
   /**
@@ -423,9 +439,9 @@ const Wappalyzer = {
         dom: transform(
           typeof dom === "string" || Array.isArray(dom)
             ? toArray(dom).reduce(
-              (dom, selector) => ({ ...dom, [selector]: { exists: "" } }),
-              {}
-            )
+                (dom, selector) => ({ ...dom, [selector]: { exists: "" } }),
+                {}
+              )
             : dom,
           true,
           false
@@ -584,13 +600,13 @@ const Wappalyzer = {
             attrs.regex = new RegExp(
               isRegex
                 ? attr
-                  // Escape slashes
-                  .replace(/\//g, "\\/")
-                  // Optimise quantifiers for long strings
-                  .replace(/\\\+/g, "__escapedPlus__")
-                  .replace(/\+/g, "{1,250}")
-                  .replace(/\*/g, "{0,250}")
-                  .replace(/__escapedPlus__/g, "\\+")
+                    // Escape slashes
+                    .replace(/\//g, "\\/")
+                    // Optimise quantifiers for long strings
+                    .replace(/\\\+/g, "__escapedPlus__")
+                    .replace(/\+/g, "{1,250}")
+                    .replace(/\*/g, "{0,250}")
+                    .replace(/__escapedPlus__/g, "\\+")
                 : "",
               "i"
             );
@@ -739,8 +755,8 @@ const Wappalyzer = {
 
         return technology
           ? Wappalyzer.analyzeManyToMany(technology, "js", {
-            [chain]: [value],
-          })
+              [chain]: [value],
+            })
           : [];
       })
       .flat();

@@ -102,10 +102,14 @@ const analyze = async (payload) => {
       text,
       certIssuer,
       dom,
+      helpers
     });
 
     // Append helper functions to the analysis
-    return analysis;
+    return {
+      analysis,
+      helpers,
+    };
 
   } catch (error) {
     console.error("Error during analysis:", error);
@@ -128,7 +132,6 @@ const scan = async (url, config = defaultConfig) => {
   try {
     const technologies = await extractTechnologies(url, config);
 
-    const { helpers } = technologies;
     // const { dom } = technologies;
 
     // console.log(technologies);
@@ -161,12 +164,14 @@ const scan = async (url, config = defaultConfig) => {
     // const combinedResults = [...jsAnalysis, ...domAnalysis];
     // console.log(domAnalysis);
     // console.log(technologies);
-    const parsedTechnologies = await analyze(technologies);
-    const resolvedTechnologies = await wappalyzer.resolve(parsedTechnologies);
-    return {
-      resolvedTechnologies,
+    const { analysis, helpers} = await analyze(technologies);
+
+    const resolvedTechnologies = await wappalyzer.resolve({
+      detections: analysis,
       helpers,
-    }
+    });
+    
+    return resolvedTechnologies;
   } catch (error) {
     console.error("Error during scan:", error);
     throw new Error("Failed to scan and analyze technologies");
@@ -200,7 +205,7 @@ const scanWithQueue = (url, config = defaultConfig) => {
 
 const test = async () => {
   // const res = await scan("https://fugamo.de/");
-  const res = await scan("https://www.adsrsounds.com/");
+  const res = await scan("https://hiutdenim.co.uk/");
   console.log(res);
 };
 

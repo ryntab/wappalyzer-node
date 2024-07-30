@@ -7,6 +7,7 @@ import dns from "dns/promises";
 import https from 'https';
 import Wappalyzer from './wappalyzer.js';
 import Wordpress_Helpers from "./helpers/Wordpress.js";
+import Shopify_Helpers from "./helpers/Shopify.js";
 
 const chromiumArgs = [
     "--no-sandbox",
@@ -265,6 +266,11 @@ const extractTechnologies = async (
             dom: $,
         });
 
+        const shopify = await Shopify_Helpers.scan({
+            url,
+            dom: $,
+        });
+
         const baseUrl = new URL(url);
 
         const scriptSrc = [];
@@ -359,6 +365,7 @@ const extractTechnologies = async (
             dom: $,
             helpers: [
                 wordpress,
+                shopify,
             ]
             // jsTechnologies
         };
