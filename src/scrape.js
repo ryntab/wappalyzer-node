@@ -8,6 +8,7 @@ import https from 'https';
 import Wappalyzer from './wappalyzer.js';
 import Wordpress_Helpers from "./helpers/Wordpress.js";
 import Shopify_Helpers from "./helpers/Shopify.js";
+import Magento_Helpers from "./helpers/Magento.js";
 
 const chromiumArgs = [
     "--no-sandbox",
@@ -64,7 +65,7 @@ const puppeteerFetch = async (url, config, browserInstance) => {
         const HTML = await page.content();
         const cookies = await page.cookies();
         const headers = mainResponse ? mainResponse.headers() : {};
-        
+
         return { HTML, cookies, headers, certIssuer, page, browser };
     } catch (error) {
         console.error(`Puppeteer fetch error: ${error.message}`);
@@ -151,6 +152,11 @@ const fetchJSContent = async (scriptUrls) => {
     try {
         const jsContents = await Promise.all(
             scriptUrls.map(async (url) => {
+                // Skip URLs with the "blob:" scheme
+                if (url.startsWith('blob:')) {
+                    return '';
+                }
+
                 const response = await fetch(url, { agent });
                 if (!response.ok) {
                     throw new Error(`Failed to fetch JS: ${response.status}`);
@@ -164,6 +170,7 @@ const fetchJSContent = async (scriptUrls) => {
         throw error;
     }
 };
+
 
 /**
  * Fetches the HTML content of a webpage, using either Puppeteer or basic fetch based on configuration.
@@ -271,6 +278,11 @@ const extractTechnologies = async (
             dom: $,
         });
 
+        const magento = await Magento_Helpers.scan({
+            url,
+            dom: $,
+        });
+
         const baseUrl = new URL(url);
 
         const scriptSrc = [];
@@ -340,7 +352,7 @@ const extractTechnologies = async (
             console.error(`DNS lookup error: ${error.message}`);
         }
 
-        const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies): [];
+        const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies) : [];
 
         if (browser) {
             await browser.close();
@@ -366,6 +378,7 @@ const extractTechnologies = async (
             helpers: [
                 wordpress,
                 shopify,
+                magento
             ]
             // jsTechnologies
         };
