@@ -1,0 +1,19 @@
+# Exclude the icons directory
+src/icons/
+
+# Exclude other common directories and files
+node_modules/
+dist/
+build/
+coverage/
+test/
+tests/
+example/
+examples/
+scripts/
+.*.swp
+*.log
+*.lock
+.DS_Store
+.idea/
+.vscode/
