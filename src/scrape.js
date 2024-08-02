@@ -28,6 +28,10 @@ const chromiumArgs = [
  * @returns {Promise<Object>} - An object containing the HTML content, cookies, headers, and certificate issuer.
  */
 const puppeteerFetch = async (url, config, browserInstance) => {
+
+    // Start performance timer ⏱️
+    const start = performance.now();
+
     try {
         const browser = browserInstance || await puppeteer.use(StealthPlugin()).launch({
             ...config.browser,
@@ -61,12 +65,12 @@ const puppeteerFetch = async (url, config, browserInstance) => {
             }
         });
 
-        await page.goto(url, { waitUntil: "networkidle2" });
+        await page.goto(url, { waitUntil: "networkidle0" });
         const HTML = await page.content();
         const cookies = await page.cookies();
         const headers = mainResponse ? mainResponse.headers() : {};
 
-        return { HTML, cookies, headers, certIssuer, page, browser };
+        return { HTML, cookies, headers, certIssuer, page, browser, duration: performance.now() - start };
     } catch (error) {
         console.error(`Puppeteer fetch error: ${error.message}`);
         throw error;
@@ -80,6 +84,10 @@ const puppeteerFetch = async (url, config, browserInstance) => {
  * @returns {Promise<Object>} - An object containing the HTML content, headers, and cookies.
  */
 const basicFetch = async (url) => {
+
+    // Start performance timer ⏱️
+    const start = performance.now();
+
     // Create a custom agent that ignores SSL certificate errors
     const agent = new https.Agent({
         rejectUnauthorized: false,
@@ -101,6 +109,7 @@ const basicFetch = async (url) => {
             HTML,
             headers,
             cookies,
+            duration: performance.now() - start
         };
     } catch (error) {
         console.error(`Basic fetch error: ${error.message}`);
@@ -185,12 +194,12 @@ const getHTML = async (url, config) => {
 
     async function targetBrowserFetch() {
         try {
-            const { HTML, cookies, headers, certIssuer, page, browser } = await puppeteerFetch(
+            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await puppeteerFetch(
                 url,
                 config
             );
             const $ = cheerio.load(HTML);
-            return { $, HTML, headers, cookies, certIssuer, page, browser };
+            return { $, HTML, headers, cookies, certIssuer, page, browser, duration };
         } catch (error) {
             console.error(
                 `Puppeteer fetch failed, falling back to basic fetch. Error: ${error.message}`
@@ -201,9 +210,9 @@ const getHTML = async (url, config) => {
 
     async function targetBasicFetch() {
         try {
-            const { HTML, headers, cookies } = await basicFetch(url);
+            const { HTML, headers, cookies, duration } = await basicFetch(url);
             const $ = cheerio.load(HTML);
-            return { $, HTML, headers, cookies, certIssuer: null, page: null, browser: null };
+            return { $, HTML, headers, cookies, certIssuer: null, page: null, browser: null, duration };
         } catch (error) {
             console.error(`Failed to fetch HTML: ${error.message}`);
             throw error;
@@ -262,10 +271,12 @@ const extractTechnologies = async (
     config
 ) => {
     try {
-        const { $, HTML, headers, cookies, certIssuer, page, browser } = await getHTML(
+        const { $, HTML, headers, cookies, certIssuer, page, browser, duration: fetchDuration } = await getHTML(
             url,
             config
         );
+
+        const helperStart = performance.now()
 
         const wordpress = await Wordpress_Helpers.scan({
             url,
@@ -281,6 +292,8 @@ const extractTechnologies = async (
             url,
             dom: $,
         });
+
+        const helperDuration = performance.now() - helperStart;
 
         const baseUrl = new URL(url);
 
@@ -378,7 +391,11 @@ const extractTechnologies = async (
                 wordpress,
                 shopify,
                 magento
-            ]
+            ],
+            performance: {
+                fetchDuration,
+                helperDuration,
+            }
             // jsTechnologies
         };
     } catch (error) {

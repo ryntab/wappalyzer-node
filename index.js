@@ -131,6 +131,7 @@ const scan = async (url, config = defaultConfig) => {
 
   try {
     const technologies = await extractTechnologies(url, config);
+    const { performance } = technologies;
 
     // const { dom } = technologies;
 
@@ -151,14 +152,17 @@ const scan = async (url, config = defaultConfig) => {
     //   Wappalyzer.categoryRequires
     // );
 
-    const { analysis, helpers} = await analyze(technologies);
+    const { analysis, helpers } = await analyze(technologies);
 
     const resolvedTechnologies = await wappalyzer.resolve({
       detections: analysis,
       helpers,
     });
     
-    return resolvedTechnologies;
+    return {
+      technologies: resolvedTechnologies,
+      performance,
+    };
   } catch (error) {
     console.error("Error during scan:", error);
     throw new Error("Failed to scan and analyze technologies");
