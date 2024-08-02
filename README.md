@@ -44,6 +44,7 @@ urls.forEach(async (url) => {
 	const res = await scanWithQueue(url);
 });
 ```
+## Helpers
 ## Examples
 
 ![Example](/docs/example.gif)
