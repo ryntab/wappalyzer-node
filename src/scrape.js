@@ -35,7 +35,7 @@ const puppeteerFetch = async (url, config, browserInstance) => {
         });
 
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
+        await page.setDefaultNavigationTimeout(30000); // Set navigation timeout to 60 seconds
 
         // Disable images and other unnecessary resources
         await page.setRequestInterception(true);
