@@ -247,7 +247,23 @@ const getHTML = async (url, config) => {
 
     console.log(`Fetching URL: ${url}`, config);
 
-    async function targetBrowserFetch() {
+    async function targetPlaywrightFetch() {
+        try {
+            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await playwrightFetch(
+                url,
+                config
+            );
+            const $ = cheerio.load(HTML);
+            return { $, HTML, headers, cookies, certIssuer, page, browser, duration };
+        } catch (error) {
+            console.error(
+                `Puppeteer fetch failed, falling back to basic fetch. Error: ${error.message}`
+            );
+            return targetBasicFetch();
+        }
+    }
+
+    async function targetPuppeteerFetch() {
         try {
             const { HTML, cookies, headers, certIssuer, page, browser, duration } = await playwrightFetch(
                 url,
@@ -274,8 +290,10 @@ const getHTML = async (url, config) => {
         }
     }
 
-    if (config.target === "browser") {
-        return await targetBrowserFetch();
+    if (config.target === "playwright") {
+        return await targetPlaywrightFetch();
+    } else if (config.target === "puppeteer"){
+        return await targetPuppeteerFetch();
     } else {
         return await targetBasicFetch();
     }
