@@ -134,3 +134,7 @@ dist
 src/icons/*
 
 test.js
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

@@ -5,7 +5,7 @@ import UserAgent from "user-agents";
 import * as cheerio from "cheerio";
 import dns from "dns/promises";
 import https from 'https';
-// import Wappalyzer from './wappalyzer.js';
+import { chromium as playwrightChromium } from 'playwright'; // Correct import
 import Wordpress_Helpers from "./helpers/Wordpress.js";
 import Shopify_Helpers from "./helpers/Shopify.js";
 import Magento_Helpers from "./helpers/Magento.js";
@@ -73,6 +73,61 @@ const puppeteerFetch = async (url, config, browserInstance) => {
         return { HTML, cookies, headers, certIssuer, page, browser, duration: performance.now() - start };
     } catch (error) {
         console.error(`Puppeteer fetch error: ${error.message}`);
+        throw error;
+    }
+};
+
+
+/**
+ * Fetches a webpage using Playwright and returns the HTML content, cookies, headers, and certificate issuer.
+ * 
+ * @param {string} url - The URL of the webpage to fetch.
+ * @param {Object} config - The configuration object for Playwright.
+ * @param {Object} [browserInstance] - An optional Playwright browser instance.
+ * @returns {Promise<Object>} - An object containing the HTML content, cookies, headers, and certificate issuer.
+ */
+const playwrightFetch = async (url, config, browserInstance) => {
+    const start = performance.now();
+    try {
+        const browser = browserInstance || await playwrightChromium.launch({
+            ...config.browser,
+            args: chromiumArgs,
+        });
+
+        const page = await browser.newPage();
+        await page.setDefaultNavigationTimeout(30000); // Set navigation timeout to 60 seconds
+
+        // Disable images and other unnecessary resources
+        await page.route('**/*', (route) => {
+            const url = route.request().url();
+            if (url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.woff') || url.endsWith('.woff2')) {
+                route.abort();
+            } else {
+                route.continue();
+            }
+        });
+
+        let mainResponse = null;
+        let certIssuer = null;
+
+        page.on('response', async (response) => {
+            if (response.url() === url) {
+                mainResponse = response;
+                const securityDetails = await response.securityDetails();
+                if (securityDetails && typeof securityDetails.issuer === 'function') {
+                    certIssuer = securityDetails.issuer();
+                }
+            }
+        });
+
+        await page.goto(url, { waitUntil: 'networkidle' });
+        const HTML = await page.content();
+        const cookies = await page.context().cookies();
+        const headers = mainResponse ? mainResponse.headers() : {};
+
+        return { HTML, cookies, headers, certIssuer, page, browser, duration: performance.now() - start };
+    } catch (error) {
+        console.error(`Playwright fetch error: ${error.message}`);
         throw error;
     }
 };
@@ -194,7 +249,7 @@ const getHTML = async (url, config) => {
 
     async function targetBrowserFetch() {
         try {
-            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await puppeteerFetch(
+            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await playwrightFetch(
                 url,
                 config
             );
