@@ -15,8 +15,15 @@ const initialize = async () => {
   }
 };
 
+const normalizeURL = (url) => {
+  if (!/^https?:\/\//i.test(url)) {
+    return `https://${url}`;
+  }
+  return url;
+}
+
 const defaultConfig = {
-  // target: "browser",
+  target: "browser",
   browser: {
     headless: false,
   },
@@ -48,7 +55,7 @@ class Queue {
 }
 
 // Create an instance of the Queue class with a concurrency level of 2
-const queue = new Queue(1);
+const queue = new Queue(5);
 
 /**
  * Analyzes the given payload to identify technologies used on a webpage.
@@ -127,10 +134,8 @@ const analyze = async (payload) => {
  * @throws {Error} Throws an error if the scan or analysis fails.
  */
 const scan = async (url, config = defaultConfig) => {
-  await initialize();
-
   try {
-    const technologies = await extractTechnologies(url, config);
+    const technologies = await extractTechnologies(normalizeURL(url), config);
     const { performance } = technologies;
 
     // const { dom } = technologies;
@@ -158,7 +163,7 @@ const scan = async (url, config = defaultConfig) => {
       detections: analysis,
       helpers,
     });
-    
+
     return {
       technologies: resolvedTechnologies,
       performance,
@@ -193,5 +198,7 @@ const scanWithQueue = (url, config = defaultConfig) => {
     });
   });
 };
+
+await initialize();
 
 export { analyze, scan, scanWithQueue };

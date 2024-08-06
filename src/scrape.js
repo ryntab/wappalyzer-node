@@ -222,7 +222,7 @@ const fetchJSContent = async (scriptUrls) => {
                 }
                 const response = await fetch(url, { agent });
                 if (!response.ok) {
-                    console.error(`Failed to fetch JS: ${response.status}`);
+                    console.error(`Failed to fetch JS: ${response.status}`, url);
                 }
                 return await response.text();
             })
@@ -247,37 +247,7 @@ const getHTML = async (url, config) => {
 
     console.log(`Fetching URL: ${url}`, config);
 
-    async function targetPlaywrightFetch() {
-        try {
-            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await playwrightFetch(
-                url,
-                config
-            );
-            const $ = cheerio.load(HTML);
-            return { $, HTML, headers, cookies, certIssuer, page, browser, duration };
-        } catch (error) {
-            console.error(
-                `Puppeteer fetch failed, falling back to basic fetch. Error: ${error.message}`
-            );
-            return targetBasicFetch();
-        }
-    }
 
-    async function targetPuppeteerFetch() {
-        try {
-            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await playwrightFetch(
-                url,
-                config
-            );
-            const $ = cheerio.load(HTML);
-            return { $, HTML, headers, cookies, certIssuer, page, browser, duration };
-        } catch (error) {
-            console.error(
-                `Puppeteer fetch failed, falling back to basic fetch. Error: ${error.message}`
-            );
-            return targetBasicFetch();
-        }
-    }
 
     async function targetBasicFetch() {
         try {
