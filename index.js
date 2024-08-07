@@ -24,6 +24,9 @@ const normalizeURL = (url) => {
 
 const defaultConfig = {
   target: "playwright",
+  helpers: {
+    run: true,
+  },
   browser: {
     headless: false,
   },
