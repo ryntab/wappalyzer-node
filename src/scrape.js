@@ -135,16 +135,29 @@ const basicFetch = async (url) => {
  * @param {string[]} cssUrls - An array of CSS file URLs.
  * @returns {Promise<string>} - A concatenated string of CSS contents.
  */
-const fetchCSSContent = async (cssUrls) => {
-  // Create a custom agent that ignores SSL certificate errors
-  const agent = new https.Agent({
-    rejectUnauthorized: false,
-  });
+const fetchCSSContent = async (cssUrls, timeout = 5000) => {
+  const fetchWithTimeout = (url, options, timeout) => {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error("Request timed out"));
+      }, timeout);
+
+      fetch(url, options)
+        .then((response) => {
+          clearTimeout(timer);
+          resolve(response);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
+    });
+  };
 
   const fetchSingleCSS = async (url) => {
     try {
       console.log(`Starting fetch for CSS from ${url}`);
-      const response = await fetch(url, { agent });
+      const response = await fetchWithTimeout(url, { agent }, timeout);
       if (!response.ok) {
         console.error(`Failed to fetch CSS from ${url}: ${response.status}`);
         return ""; // Return an empty string on failure
@@ -159,6 +172,11 @@ const fetchCSSContent = async (cssUrls) => {
     }
   };
 
+  // Create a custom agent that ignores SSL certificate errors
+  const agent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+
   try {
     const cssContents = await Promise.all(
       cssUrls.map((url) =>
@@ -172,7 +190,8 @@ const fetchCSSContent = async (cssUrls) => {
     return cssContents.join("\n");
   } catch (error) {
     console.error(`CSS fetch error in Promise.all: ${error.message}`);
-    throw error;
+    // Ensure the function never fails by returning an empty string or partial result
+    return "";
   }
 };
 
@@ -182,28 +201,52 @@ const fetchCSSContent = async (cssUrls) => {
  * @param {string[]} jsUrls - An array of JS file URLs.
  * @returns {Promise<string>} - A concatenated string of JS contents.
  */
-const fetchJSContent = async (scriptUrls) => {
+const fetchJSContent = async (scriptUrls, timeout = 5000) => {
   try {
     // Create a custom agent that ignores SSL certificate errors
     const agent = new https.Agent({
       rejectUnauthorized: false,
     });
 
-    console.log("Fetching JS content from URLs:", scriptUrls);
+    const fetchWithTimeout = (url, options, timeout) => {
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+          reject(new Error("Request timed out"));
+        }, timeout);
+
+        fetch(url, options)
+          .then((response) => {
+            clearTimeout(timer);
+            resolve(response);
+          })
+          .catch((err) => {
+            clearTimeout(timer);
+            reject(err);
+          });
+      });
+    };
+
     const jsContents = await Promise.all(
       scriptUrls.map(async (url) => {
+        console.log(`Starting fetch for JS from ${url}`);
         // Skip URLs with the "blob:" scheme
         if (url.startsWith("blob:")) {
           return "";
         }
-        const response = await fetch(url, { agent });
-        if (!response.ok) {
-          console.error(`Failed to fetch JS: ${response.status}`);
+        try {
+          const response = await fetchWithTimeout(url, { agent }, timeout);
+          if (!response.ok) {
+            console.error(`Failed to fetch JS: ${url}: ${response.status}`);
+            return ""; // Return an empty string on failure
+          }
+          return await response.text();
+        } catch (err) {
+          console.error(`Failed to fetch JS: ${url}: ${err.message}`);
           return ""; // Return an empty string on failure
         }
-        return await response.text();
       })
     );
+
     return jsContents.join("\n");
   } catch (error) {
     console.error(`JS fetch error: ${error.message}`);
@@ -297,7 +340,6 @@ const getJs = async (page, technologies) => {
 
 const runHelpers = async (url, dom, config) => {
   if (config.helpers && config.helpers.run) {
-
     const helperStart = performance.now();
 
     const wordpress = await Wordpress_Helpers.scan({
@@ -350,10 +392,11 @@ const extractTechnologies = async (url, config) => {
 
     console.log("Fetched HTML for", url);
 
-    const {
-      helpers,
-      duration: helperDuration,
-    } = await runHelpers(url, $, config.helpers);
+    const { helpers, duration: helperDuration } = await runHelpers(
+      url,
+      $,
+      config.helpers
+    );
 
     const baseUrl = new URL(url);
 
