@@ -23,17 +23,22 @@ const normalizeURL = (url) => {
 }
 
 const defaultConfig = {
-  target: "browser",
+  target: "playwright",
   browser: {
     headless: false,
   },
 };
 
-class Queue {
+class DefaultQueue {
   constructor(concurrency) {
     this.concurrency = concurrency;
     this.running = 0;
     this.queue = [];
+  }
+
+  setConcurrency(concurrency) {
+    this.concurrency = concurrency;
+    this.run();
   }
 
   push(task) {
@@ -54,8 +59,15 @@ class Queue {
   }
 }
 
-// Create an instance of the Queue class with a concurrency level of 2
-const queue = new Queue(5);
+let defaultQueue;
+
+const setConcurrency = (concurrency) => {
+  if (defaultQueue) {
+    defaultQueue.setConcurrency(concurrency);
+  } else {
+    defaultQueue = new DefaultQueue(concurrency);
+  }
+};
 
 /**
  * Analyzes the given payload to identify technologies used on a webpage.
@@ -138,25 +150,6 @@ const scan = async (url, config = defaultConfig) => {
     const technologies = await extractTechnologies(normalizeURL(url), config);
     const { performance } = technologies;
 
-    // const { dom } = technologies;
-
-    // Analyze JavaScript variables
-    // const jsAnalysis = Wappalyzer.analyzeJs(
-    //   url,
-    //   dom,
-    //   technologies.js,
-    //   Wappalyzer.requires,
-    //   Wappalyzer.categoryRequires
-    // );
-
-    // // // Analyze DOM nodes
-    // const domAnalysis = await Wappalyzer.analyzeDom(
-    //   url,
-    //   dom,
-    //   Wappalyzer.requires,
-    //   Wappalyzer.categoryRequires
-    // );
-
     const { analysis, helpers } = await analyze(technologies);
 
     const resolvedTechnologies = await wappalyzer.resolve({
@@ -169,8 +162,9 @@ const scan = async (url, config = defaultConfig) => {
       performance,
     };
   } catch (error) {
-    console.error("Error during scan:", error);
-    throw new Error("Failed to scan and analyze technologies");
+    return {
+      error: "Failed to scan technologies",
+    }
   }
 };
 
@@ -186,7 +180,8 @@ const scan = async (url, config = defaultConfig) => {
  * @returns {Promise<Object>} A promise that resolves to the identified technologies.
  * @throws {Error} Throws an error if the scan or analysis fails.
  */
-const scanWithQueue = (url, config = defaultConfig) => {
+const scanWithQueue = (url, config = defaultConfig, customQueue = null) => {
+  const queue = customQueue || defaultQueue;
   return new Promise((resolve, reject) => {
     queue.push(async () => {
       try {
@@ -199,6 +194,9 @@ const scanWithQueue = (url, config = defaultConfig) => {
   });
 };
 
+// Initialize the default queue with a default concurrency level
+setConcurrency(2);
+
 await initialize();
 
-export { analyze, scan, scanWithQueue };
+export { analyze, scan, scanWithQueue, setConcurrency, DefaultQueue };
