@@ -28,52 +28,53 @@ const chromiumArgs = [
  * @returns {Promise<Object>} - An object containing the HTML content, cookies, headers, and certificate issuer.
  */
 const puppeteerFetch = async (url, config, browserInstance) => {
+    // Start performance timer ⏱️
     const start = performance.now();
-  
+
     try {
-      const browser = browserInstance || await puppeteer.use(StealthPlugin()).launch({
-        ...config.browser,
-        args: chromiumArgs,
-      });
-  
-      const page = await browser.newPage();
-      await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
-  
-      // Disable images and other unnecessary resources
-      await page.setRequestInterception(true);
-      page.on('request', (req) => {
-        const resourceType = req.resourceType();
-        if (resourceType === 'image' || resourceType === 'font') {
-          req.abort();
-        } else {
-          req.continue();
-        }
-      });
-  
-      let mainResponse = null;
-      let certIssuer = null;
-  
-      page.on("response", async (response) => {
-        if (response.url() === url) {
-          mainResponse = response;
-          const securityDetails = await response.securityDetails();
-          if (securityDetails) {
-            certIssuer = securityDetails.issuer();
-          }
-        }
-      });
-  
-      await page.goto(url, { waitUntil: "domcontentloaded" });
-      const HTML = await page.content();
-      const cookies = await page.cookies();
-      const headers = mainResponse ? mainResponse.headers() : {};
-  
-      return { HTML, cookies, headers, certIssuer, page, browser, duration: performance.now() - start };
+        const browser = browserInstance || await puppeteer.use(StealthPlugin()).launch({
+            ...config.browser,
+            args: chromiumArgs,
+        });
+
+        const page = await browser.newPage();
+        await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
+
+        // Disable images and other unnecessary resources
+        await page.setRequestInterception(true);
+        page.on('request', (req) => {
+            const resourceType = req.resourceType();
+            if (resourceType === 'image' || resourceType === 'font') {
+                req.abort();
+            } else {
+                req.continue();
+            }
+        });
+
+        let mainResponse = null;
+        let certIssuer = null;
+
+        page.on("response", async (response) => {
+            if (response.url() === url) {
+                mainResponse = response;
+                const securityDetails = await response.securityDetails();
+                if (securityDetails) {
+                    certIssuer = securityDetails.issuer();
+                }
+            }
+        });
+
+        await page.goto(url, { waitUntil: "domcontentloaded" });
+        const HTML = await page.content();
+        const cookies = await page.cookies();
+        const headers = mainResponse ? mainResponse.headers() : {};
+
+        return { HTML, cookies, headers, certIssuer, page, browser, duration: performance.now() - start };
     } catch (error) {
-      console.error(`Puppeteer fetch error: ${error.message}`);
-      throw error;
+        console.error(`Puppeteer fetch error: ${error.message}`);
+        throw error;
     }
-  };
+};
 
 
 /**
@@ -84,15 +85,15 @@ const puppeteerFetch = async (url, config, browserInstance) => {
  * @param {Object} [browserInstance] - An optional Playwright browser instance.
  * @returns {Promise<Object>} - An object containing the HTML content, cookies, headers, and certificate issuer.
  */
-const playwrightFetch = async (url, config, pageInstance) => {
+const playwrightFetch = async (url, config, browserInstance) => {
     const start = performance.now();
-
     try {
-        const page = pageInstance || await playwrightChromium.launch({
+        const browser = browserInstance || await playwrightChromium.launch({
             ...config.browser,
             args: chromiumArgs,
-        }).newPage();
+        });
 
+        const page = await browser.newPage();
         await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
 
         // Disable images and other unnecessary resources
@@ -112,7 +113,7 @@ const playwrightFetch = async (url, config, pageInstance) => {
             if (response.url() === url) {
                 mainResponse = response;
                 const securityDetails = await response.securityDetails();
-                if (securityDetails) {
+                if (securityDetails && typeof securityDetails.issuer === 'function') {
                     certIssuer = securityDetails.issuer();
                 }
             }
