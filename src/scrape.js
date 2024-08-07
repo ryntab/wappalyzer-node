@@ -135,7 +135,7 @@ const basicFetch = async (url) => {
  * @param {string[]} cssUrls - An array of CSS file URLs.
  * @returns {Promise<string>} - A concatenated string of CSS contents.
  */
-const fetchCSSContent = async (cssUrls, timeout = 5000) => {
+const fetchCSSContent = async (cssUrls, timeout = 3000) => {
   const fetchWithTimeout = (url, options, timeout) => {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
@@ -156,15 +156,12 @@ const fetchCSSContent = async (cssUrls, timeout = 5000) => {
 
   const fetchSingleCSS = async (url) => {
     try {
-      console.log(`Starting fetch for CSS from ${url}`);
       const response = await fetchWithTimeout(url, { agent }, timeout);
       if (!response.ok) {
         console.error(`Failed to fetch CSS from ${url}: ${response.status}`);
         return ""; // Return an empty string on failure
       }
-      console.log(`Successfully fetched CSS from ${url}`);
       const text = await response.text();
-      console.log(`Fetched CSS content length from ${url}: ${text.length}`);
       return text;
     } catch (err) {
       console.error(`Error fetching CSS from ${url}: ${err.message}`);
@@ -186,7 +183,6 @@ const fetchCSSContent = async (cssUrls, timeout = 5000) => {
         })
       )
     );
-    console.log("Fetched all CSS contents:", cssContents);
     return cssContents.join("\n");
   } catch (error) {
     console.error(`CSS fetch error in Promise.all: ${error.message}`);
@@ -201,7 +197,7 @@ const fetchCSSContent = async (cssUrls, timeout = 5000) => {
  * @param {string[]} jsUrls - An array of JS file URLs.
  * @returns {Promise<string>} - A concatenated string of JS contents.
  */
-const fetchJSContent = async (scriptUrls, timeout = 5000) => {
+const fetchJSContent = async (scriptUrls, timeout = 3000) => {
   try {
     // Create a custom agent that ignores SSL certificate errors
     const agent = new https.Agent({
@@ -228,7 +224,6 @@ const fetchJSContent = async (scriptUrls, timeout = 5000) => {
 
     const jsContents = await Promise.all(
       scriptUrls.map(async (url) => {
-        console.log(`Starting fetch for JS from ${url}`);
         // Skip URLs with the "blob:" scheme
         if (url.startsWith("blob:")) {
           return "";
