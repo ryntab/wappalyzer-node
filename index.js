@@ -3,14 +3,18 @@ import { extractTechnologies } from "./src/scrape.js";
 import { load_technologies } from "./src/technologies/__loader.js";
 import categories from "./src/categories.json" assert { type: "json" };
 import Wappalyzer from "./src/wappalyzer.js";
+import BrowserPool from './src/browserPool.js'; // Add this import
 
 let isInitialized = false;
+let browserPool;
 
-const initialize = async () => {
+const initialize = async (config) => {
   if (!isInitialized) {
     const techLib = await load_technologies();
     await Wappalyzer.setTechnologies(techLib);
     await Wappalyzer.setCategories(categories);
+    browserPool = new BrowserPool(config.maxBrowsers || 5);
+    await browserPool.init(); // Initialize the browser pool
     isInitialized = true;
   }
 };
@@ -20,7 +24,7 @@ const normalizeURL = (url) => {
     return `https://${url}`;
   }
   return url;
-}
+};
 
 const defaultConfig = {
   target: "playwright",
@@ -62,6 +66,7 @@ class DefaultQueue {
   }
 }
 
+// let defaultQueue = new DefaultQueue(2);
 let defaultQueue;
 
 const setConcurrency = (concurrency) => {
@@ -167,7 +172,7 @@ const scan = async (url, config = defaultConfig) => {
   } catch (error) {
     return {
       error: "Failed to scan technologies",
-    }
+    };
   }
 };
 
@@ -185,21 +190,30 @@ const scan = async (url, config = defaultConfig) => {
  */
 const scanWithQueue = (url, config = defaultConfig, customQueue = null) => {
   const queue = customQueue || defaultQueue;
+  if (!queue) {
+    throw new Error("No queue provided");
+  }
   return new Promise((resolve, reject) => {
     queue.push(async () => {
+      let browser;
       try {
-        const result = await scan(url, config);
+        browser = await browserPool.getBrowser();
+        const result = await scan(url, { ...config, browserInstance: browser });
         resolve(result);
       } catch (error) {
         reject(error);
+      } finally {
+        if (browser) {
+          browserPool.releaseBrowser(browser);
+        }
       }
     });
   });
 };
 
-// Initialize the default queue with a default concurrency level
-setConcurrency(2);
+const init = async (config = { maxBrowsers: 5, concurrency: 2 }) => {
+  await initialize(config);
+  setConcurrency(config.concurrency);
+};
 
-await initialize();
-
-export { analyze, scan, scanWithQueue, setConcurrency, DefaultQueue };
+export { analyze, scan, scanWithQueue, setConcurrency, DefaultQueue, init };
