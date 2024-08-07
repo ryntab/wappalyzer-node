@@ -154,12 +154,22 @@ const analyze = async (payload) => {
  * @throws {Error} Throws an error if the scan or analysis fails.
  */
 const scan = async (url, config = defaultConfig) => {
+  let browser;
   try {
+
+    if (!isInitialized) {
+      await initialize(config);
+    }
+
+    if (!config.browserInstance) {
+      browser = await browserPool.getBrowser();
+      config.browserInstance = browser;
+    }
+
     const technologies = await extractTechnologies(normalizeURL(url), config);
     const { performance } = technologies;
-
     const { analysis, helpers } = await analyze(technologies);
-
+    console.log(analysis);
     const resolvedTechnologies = await wappalyzer.resolve({
       detections: analysis,
       helpers,
@@ -170,11 +180,17 @@ const scan = async (url, config = defaultConfig) => {
       performance,
     };
   } catch (error) {
+    console.error("Error during scan:", error);
     return {
       error: "Failed to scan technologies",
     };
+  } finally {
+    if (browser) {
+      browserPool.releaseBrowser(browser);
+    }
   }
 };
+
 
 /**
  * Queues a scan for the given URL and ensures that no more than the specified
