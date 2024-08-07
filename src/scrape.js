@@ -28,7 +28,6 @@ const chromiumArgs = [
  * @returns {Promise<Object>} - An object containing the HTML content, cookies, headers, and certificate issuer.
  */
 const puppeteerFetch = async (url, config, browserInstance) => {
-
     // Start performance timer ⏱️
     const start = performance.now();
 
@@ -39,7 +38,7 @@ const puppeteerFetch = async (url, config, browserInstance) => {
         });
 
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(30000); // Set navigation timeout to 60 seconds
+        await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
 
         // Disable images and other unnecessary resources
         await page.setRequestInterception(true);
@@ -65,7 +64,7 @@ const puppeteerFetch = async (url, config, browserInstance) => {
             }
         });
 
-        await page.goto(url, { waitUntil: "networkidle0" });
+        await page.goto(url, { waitUntil: "domcontentloaded" });
         const HTML = await page.content();
         const cookies = await page.cookies();
         const headers = mainResponse ? mainResponse.headers() : {};
@@ -95,12 +94,12 @@ const playwrightFetch = async (url, config, browserInstance) => {
         });
 
         const page = await browser.newPage();
-        await page.setDefaultNavigationTimeout(10000); // Set navigation timeout to 60 seconds
+        await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
 
         // Disable images and other unnecessary resources
         await page.route('**/*', (route) => {
-            const url = route.request().url();
-            if (url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.woff') || url.endsWith('.woff2')) {
+            const requestUrl = route.request().url();
+            if (requestUrl.endsWith('.jpg') || requestUrl.endsWith('.png') || requestUrl.endsWith('.woff') || requestUrl.endsWith('.woff2')) {
                 route.abort();
             } else {
                 route.continue();
@@ -120,7 +119,7 @@ const playwrightFetch = async (url, config, browserInstance) => {
             }
         });
 
-        await page.goto(url, { waitUntil: 'networkidle' });
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
         const HTML = await page.content();
         const cookies = await page.context().cookies();
         const headers = mainResponse ? mainResponse.headers() : {};
@@ -131,6 +130,7 @@ const playwrightFetch = async (url, config, browserInstance) => {
         throw error;
     }
 };
+
 
 /**
  * Fetches a webpage using basic fetch and returns the HTML content, headers, and cookies.
@@ -265,7 +265,7 @@ const getHTML = async (url, config) => {
 
     async function targetPuppeteerFetch() {
         try {
-            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await playwrightFetch(
+            const { HTML, cookies, headers, certIssuer, page, browser, duration } = await puppeteerFetch(
                 url,
                 config
             );
@@ -291,10 +291,13 @@ const getHTML = async (url, config) => {
     }
 
     if (config.target === "playwright") {
+        console.log('Fetching', url, 'with Playwright');
         return await targetPlaywrightFetch();
-    } else if (config.target === "puppeteer"){
+    } else if (config.target === "puppeteer") {
+        console.log('Fetching', url, 'with Puppeteer');
         return await targetPuppeteerFetch();
     } else {
+        console.log('Fetching', url, 'with Basic Fetch');
         return await targetBasicFetch();
     }
 };
