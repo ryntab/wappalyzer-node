@@ -16,7 +16,7 @@ const defaultConfig = {
     run: true,
   },
   browser: {
-    headless: false,
+    headless: true,
   },
 };
 
