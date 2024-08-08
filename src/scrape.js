@@ -36,7 +36,7 @@ const playwrightFetch = async (url, config, browserInstance) => {
       }));
 
     const page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
+    await page.setDefaultNavigationTimeout(config.maxTime || 60000); // Set navigation timeout to maxTime or 60 seconds
 
     // Disable images and other unnecessary resources
     await page.route("**/*", (route) => {
@@ -65,7 +65,31 @@ const playwrightFetch = async (url, config, browserInstance) => {
       }
     });
 
-    await page.goto(url, { waitUntil: "domcontentloaded" });
+    await page.goto(url, { waitUntil: config.waitUntil || "domcontentloaded" });
+
+    // Scroll to the bottom of the page if specified in the config
+    if (config.scrollToBottom) {
+      await page.evaluate(async () => {
+        await new Promise((resolve) => {
+          const scrollInterval = setInterval(() => {
+            window.scrollBy(0, window.innerHeight);
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+              clearInterval(scrollInterval);
+              resolve();
+            }
+          }, 100);
+        });
+      });
+    }
+
+    // Wait for minTime if specified
+    if (config.minTime) {
+      const elapsed = performance.now() - start;
+      if (elapsed < config.minTime) {
+        await new Promise((resolve) => setTimeout(resolve, config.minTime - elapsed));
+      }
+    }
+
     const HTML = await page.content();
     const cookies = await page.context().cookies();
     const headers = mainResponse ? mainResponse.headers() : {};

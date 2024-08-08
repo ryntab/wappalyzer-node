@@ -20,7 +20,7 @@ const normalizeURL = (url) => {
     return `https://${url}`;
   }
   return url;
-}
+};
 
 const defaultConfig = {
   target: "playwright",
@@ -30,6 +30,16 @@ const defaultConfig = {
   browser: {
     headless: false,
   },
+  maxTime: 60000, // default max time 60 seconds
+  minTime: 10500, // default min time 0 seconds
+  scrollToBottom: true, // default do not scroll to bottom
+
+  /*
+
+  https://playwright.dev/docs/api/class-page
+  "load" | "domcontentloaded" | "networkidle" | "commit" (optional)#
+  */
+  waitUntil: "domcontentloaded", // default wait for dom content loaded
 };
 
 class DefaultQueue {
@@ -124,7 +134,7 @@ const analyze = async (payload) => {
       text,
       certIssuer,
       dom,
-      helpers
+      helpers,
     });
 
     // Append helper functions to the analysis
@@ -132,7 +142,6 @@ const analyze = async (payload) => {
       analysis,
       helpers,
     };
-
   } catch (error) {
     console.error("Error during analysis:", error);
     throw new Error("Failed to analyze technologies");
@@ -167,7 +176,7 @@ const scan = async (url, config = defaultConfig) => {
   } catch (error) {
     return {
       error: "Failed to scan technologies",
-    }
+    };
   }
 };
 
