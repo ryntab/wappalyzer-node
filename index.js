@@ -4,9 +4,21 @@ import { load_technologies } from "./src/technologies/__loader.js";
 import categories from "./src/categories.json" assert { type: "json" };
 import Wappalyzer from "./src/wappalyzer.js";
 import BrowserPool from './src/browserPool.js'; // Add this import
+import normalizeURL from "./src/utils/normalizeURL.js";
 
 let isInitialized = false;
 let browserPool;
+let defaultQueue;
+
+const defaultConfig = {
+  target: "playwright",
+  helpers: {
+    run: true,
+  },
+  browser: {
+    headless: false,
+  },
+};
 
 const initialize = async (config) => {
   if (!isInitialized) {
@@ -19,21 +31,9 @@ const initialize = async (config) => {
   }
 };
 
-const normalizeURL = (url) => {
-  if (!/^https?:\/\//i.test(url)) {
-    return `https://${url}`;
-  }
-  return url;
-};
-
-const defaultConfig = {
-  target: "playwright",
-  helpers: {
-    run: true,
-  },
-  browser: {
-    headless: false,
-  },
+const init = async (config = { maxBrowsers: 5, concurrency: 2 }) => {
+  await initialize(config);
+  setConcurrency(config.concurrency);
 };
 
 class DefaultQueue {
@@ -67,7 +67,6 @@ class DefaultQueue {
 }
 
 // let defaultQueue = new DefaultQueue(2);
-let defaultQueue;
 
 const setConcurrency = (concurrency) => {
   if (defaultQueue) {
@@ -169,7 +168,7 @@ const scan = async (url, config = defaultConfig) => {
     const technologies = await extractTechnologies(normalizeURL(url), config);
     const { performance } = technologies;
     const { analysis, helpers } = await analyze(technologies);
-    console.log(analysis);
+    
     const resolvedTechnologies = await wappalyzer.resolve({
       detections: analysis,
       helpers,
@@ -225,11 +224,6 @@ const scanWithQueue = (url, config = defaultConfig, customQueue = null) => {
       }
     });
   });
-};
-
-const init = async (config = { maxBrowsers: 5, concurrency: 2 }) => {
-  await initialize(config);
-  setConcurrency(config.concurrency);
 };
 
 export { analyze, scan, scanWithQueue, setConcurrency, DefaultQueue, init };
