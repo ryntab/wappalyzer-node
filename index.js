@@ -3,7 +3,7 @@ import { extractTechnologies } from "./src/scrape.js";
 import { load_technologies } from "./src/technologies/__loader.js";
 import categories from "./src/categories.json" assert { type: "json" };
 import Wappalyzer from "./src/wappalyzer.js";
-import BrowserPool from './src/browserPool.js'; // Add this import
+import BrowserPool from './src/browserPool.js'; // Import the updated BrowserPool
 import normalizeURL from "./src/utils/normalizeURL.js";
 
 let isInitialized = false;
@@ -17,23 +17,29 @@ const defaultConfig = {
   },
   browser: {
     headless: true,
+    maxBrowsers: 5, // Default number of browsers
+    maxContextsPerBrowser: 5, // Default number of contexts per browser
   },
 };
 
-const initialize = async (config) => {
+const initialize = async (config = defaultConfig) => {
   if (!isInitialized) {
     const techLib = await load_technologies();
     await Wappalyzer.setTechnologies(techLib);
     await Wappalyzer.setCategories(categories);
-    browserPool = new BrowserPool(config.maxBrowsers || 5);
-    await browserPool.init(); // Initialize the browser pool
+    
+    const maxBrowsers = config.browser.maxBrowsers || defaultConfig.browser.maxBrowsers;
+    const maxContextsPerBrowser = config.browser.maxContextsPerBrowser || defaultConfig.browser.maxContextsPerBrowser;
+
+    browserPool = new BrowserPool(maxBrowsers, maxContextsPerBrowser);
+    await browserPool.init(); // Initialize the browser pool with custom settings
     isInitialized = true;
   }
 };
 
-const init = async (config = { maxBrowsers: 5, concurrency: 2 }) => {
+const init = async (config = defaultConfig) => {
   await initialize(config);
-  setConcurrency(config.concurrency);
+  setConcurrency(config.concurrency || 2); // Default concurrency is 2
 };
 
 class DefaultQueue {
@@ -66,8 +72,6 @@ class DefaultQueue {
   }
 }
 
-// let defaultQueue = new DefaultQueue(2);
-
 const setConcurrency = (concurrency) => {
   if (defaultQueue) {
     defaultQueue.setConcurrency(concurrency);
@@ -76,27 +80,6 @@ const setConcurrency = (concurrency) => {
   }
 };
 
-/**
- * Analyzes the given payload to identify technologies used on a webpage.
- *
- * @async
- * @function analyze
- * @param {Object} payload - The payload containing various website data.
- * @param {string} payload.url - The URL of the website.
- * @param {string} payload.html - The HTML content of the website.
- * @param {string} payload.css - The combined CSS content of the website.
- * @param {Array<string>} payload.scriptSrc - Array of script source URLs.
- * @param {Array<string>} payload.scripts - Array of inline script contents.
- * @param {Object} payload.headers - HTTP headers of the website.
- * @param {Object} payload.cookies - Cookies set by the website.
- * @param {Object} payload.meta - Meta tags from the website.
- * @param {Object} payload.dns - DNS records of the website, including txt and mx.
- * @param {Array<string>} payload.dns.txt - DNS TXT records of the website.
- * @param {Array<string>} payload.dns.mx - DNS MX records of the website.
- * @param {string} payload.certIssuer - The certificate issuer of the website.
- * @returns {Promise<Object>} A promise that resolves to the identified technologies.
- * @throws {Error} Throws an error if the analysis fails.
- */
 const analyze = async (payload) => {
   try {
     const {
@@ -131,7 +114,6 @@ const analyze = async (payload) => {
       helpers
     });
 
-    // Append helper functions to the analysis
     return {
       analysis,
       helpers,
@@ -143,29 +125,18 @@ const analyze = async (payload) => {
   }
 };
 
-/**
- * Extracts technologies and analyzes them for the given URL.
- *
- * @async
- * @function scan
- * @param {string} url - The URL of the website to scan.
- * @returns {Promise<Object>} A promise that resolves to the identified technologies.
- * @throws {Error} Throws an error if the scan or analysis fails.
- */
 const scan = async (url, config = defaultConfig) => {
-  let browser;
+  let browser, context;
   try {
-
     if (!isInitialized) {
       await initialize(config);
     }
 
-    if (!config.browserInstance) {
-      browser = await browserPool.getBrowser();
-      config.browserInstance = browser;
-    }
+    const { browser: b, context: c } = await browserPool.getBrowserContext();
+    browser = b;
+    context = c;
 
-    const technologies = await extractTechnologies(normalizeURL(url), config);
+    const technologies = await extractTechnologies(normalizeURL(url), { ...config, browserInstance: context });
     const { performance } = technologies;
     const { analysis, helpers } = await analyze(technologies);
     
@@ -184,42 +155,45 @@ const scan = async (url, config = defaultConfig) => {
       error: "Failed to scan technologies",
     };
   } finally {
-    if (browser) {
-      browserPool.releaseBrowser(browser);
+    if (browser && context) {
+      await browserPool.releaseBrowserContext(browser, context);
     }
   }
 };
 
-
-/**
- * Queues a scan for the given URL and ensures that no more than the specified
- * number of concurrent scans are running at any time.
- *
- * @function scanWithQueue
- * @param {string} url - The URL of the website to scan.
- * @param {Object} [config] - The configuration options for scanning.
- * @param {Object} [config.browser] - The browser configuration options.
- * @param {boolean} [config.browser.headless=false] - Whether to run the browser in headless mode.
- * @returns {Promise<Object>} A promise that resolves to the identified technologies.
- * @throws {Error} Throws an error if the scan or analysis fails.
- */
 const scanWithQueue = (url, config = defaultConfig, customQueue = null) => {
   const queue = customQueue || defaultQueue;
   if (!queue) {
     throw new Error("No queue provided");
   }
+
+  if (typeof url !== "string") {
+    throw new Error("URL must be a string, or an array of strings");
+  }
+
+  if (Array.isArray(url)) {
+    return Promise.all(url.map((u) => scanWithQueue(u, config, queue)));
+  }
+
   return new Promise((resolve, reject) => {
     queue.push(async () => {
-      let browser;
+      let browser, context;
       try {
-        browser = await browserPool.getBrowser();
-        const result = await scan(url, { ...config, browserInstance: browser });
+        if (!isInitialized) {
+          await initialize(config);
+        }
+
+        const { browser: b, context: c } = await browserPool.getBrowserContext();
+        browser = b;
+        context = c;
+
+        const result = await scan(url, { ...config, browserInstance: context });
         resolve(result);
       } catch (error) {
         reject(error);
       } finally {
-        if (browser) {
-          browserPool.releaseBrowser(browser);
+        if (browser && context) {
+          await browserPool.releaseBrowserContext(browser, context);
         }
       }
     });
