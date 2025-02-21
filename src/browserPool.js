@@ -1,71 +1,91 @@
 import { chromium } from 'playwright';
 
 class BrowserPool {
-  constructor(maxBrowsers, maxContextsPerBrowser) {
-    this.maxBrowsers = maxBrowsers || 5; // Default to 5 if not provided
-    this.maxContextsPerBrowser = maxContextsPerBrowser || 5; // Default to 5 contexts per browser if not provided
-    this.browsers = [];
-    this.idleBrowsers = [];
-    this.browserContextMap = new Map();
-    this.isInitialized = false;
+  constructor(maxBrowsers = 5, maxContextsPerBrowser = 5) {
+    this.maxBrowsers = maxBrowsers;
+    this.maxContextsPerBrowser = maxContextsPerBrowser;
+    this.browsers = []; // ✅ Using an array, .includes() is the correct check
+    this.contexts = new Map(); // ✅ Track browser usage
   }
 
   async init() {
-    try {
-      for (let i = 0; i < this.maxBrowsers; i++) {
-        const browser = await chromium.launch({ headless: true });
-        this.browsers.push(browser);
-        this.idleBrowsers.push(browser);
-        this.browserContextMap.set(browser, []); // Initialize an empty context list for each browser
-      }
-      this.isInitialized = true;
-    } catch (error) {
-      console.error('Failed to initialize browser pool:', error);
-      throw error;
+    console.log(`🔧 Initializing Browser Pool with max ${this.maxBrowsers} browsers.`);
+    for (let i = 0; i < this.maxBrowsers; i++) {
+      const browser = await this._launchBrowser();
+      this.browsers.push(browser);
+      this.contexts.set(browser, []);
     }
+  }
+
+  async _launchBrowser() {
+    console.log(`🚀 Launching a new browser (Total: ${this.browsers.length + 1})`);
+    return await chromium.launch({ headless: false });
   }
 
   async getBrowserContext() {
-    if (!this.isInitialized) {
-      throw new Error('Browser pool is not initialized');
-    }
+    console.log(`📌 Browsers in pool: ${this.browsers.length}`);
+    console.log(`📌 Contexts in pool: ${Array.from(this.contexts.values()).flat().length}`);
+    console.log(`📌 Max contexts per browser: ${this.maxContextsPerBrowser}`);
+    console.log(`📌 Max browsers: ${this.maxBrowsers}`);
 
-    let selectedBrowser;
-    for (const browser of this.idleBrowsers) {
-      const contexts = this.browserContextMap.get(browser);
+    // ✅ Check for available browser context
+    for (const browser of this.browsers) {
+      const contexts = this.contexts.get(browser) || [];
       if (contexts.length < this.maxContextsPerBrowser) {
-        selectedBrowser = browser;
-        break;
+        console.log(`✅ Using existing browser. Contexts used: ${contexts.length}`);
+        const context = await browser.newContext();
+        contexts.push(context);
+        this.contexts.set(browser, contexts);
+        return { browser, context };
       }
     }
 
-    if (!selectedBrowser) {
-      while (this.idleBrowsers.length === 0) {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for an idle browser
-      }
-      selectedBrowser = this.idleBrowsers.pop();
+    // ✅ If max browsers are running, WAIT instead of creating a new one
+    if (this.browsers.length >= this.maxBrowsers) {
+      console.warn("⚠️ Max browsers reached. Waiting for a free one...");
+
+      return new Promise((resolve) => {
+        const interval = setInterval(async () => {
+          for (const browser of this.browsers) {
+            const contexts = this.contexts.get(browser) || [];
+            if (contexts.length < this.maxContextsPerBrowser) {
+              clearInterval(interval);
+              const context = await browser.newContext();
+              contexts.push(context);
+              this.contexts.set(browser, contexts);
+              resolve({ browser, context });
+              return;
+            }
+          }
+        }, 500); // Check every 500ms
+      });
     }
 
-    const context = await selectedBrowser.newContext();
-    const contexts = this.browserContextMap.get(selectedBrowser);
-    contexts.push(context);
-    this.browserContextMap.set(selectedBrowser, contexts);
+    // ✅ Otherwise, launch a new browser if allowed
+    if (this.browsers.length < this.maxBrowsers) {
+      console.log("🚀 Launching a new browser...");
+      const newBrowser = await this._launchBrowser();
+      this.browsers.push(newBrowser);
+      const context = await newBrowser.newContext();
+      this.contexts.set(newBrowser, [context]);
+      return { browser: newBrowser, context };
+    }
 
-    return { browser: selectedBrowser, context };
+    throw new Error("❌ No available browsers or contexts.");
   }
 
   async releaseBrowserContext(browser, context) {
-    const contexts = this.browserContextMap.get(browser);
-    const contextIndex = contexts.indexOf(context);
-    if (contextIndex > -1) {
-      contexts.splice(contextIndex, 1);
+    if (!this.contexts.has(browser)) return;
+
+    const contexts = this.contexts.get(browser);
+    const index = contexts.indexOf(context);
+
+    if (index > -1) {
+      contexts.splice(index, 1);
+      await context.close();
     }
 
-    await context.close();
-
-    if (contexts.length === 0) {
-      this.idleBrowsers.push(browser);
-    }
+    // ✅ Keep the browser alive for future scans (no forced close)
   }
 
   async closeAll() {
@@ -73,9 +93,7 @@ class BrowserPool {
       await browser.close();
     }
     this.browsers = [];
-    this.idleBrowsers = [];
-    this.browserContextMap.clear();
-    this.isInitialized = false;
+    this.contexts.clear();
   }
 }
 

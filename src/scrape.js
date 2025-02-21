@@ -15,7 +15,40 @@ const chromiumArgs = [
   "--ignore-certificate-errors",
   "--allow-running-insecure-content",
   "--disable-web-security",
+  "--disable-http2", // 🔧 Disable HTTP/2 support
 ];
+
+const createLogger = (config = {}) => {
+  return (errors, functionName, message) => {
+    if (!config.debug.enabled) return;
+
+    if (!config.debug.silent) {
+      console.error(`❌ [${functionName}] ${message}`);
+    }
+    if (errors) {
+      errors.push({ function: functionName, message });
+    }
+  };
+};
+
+const extractCSSClasses = (cssText) => {
+  const classNames = new Set();
+
+  // Match class names like .woocommerce, .elementor-header
+  const classMatches = cssText.match(/\.[a-zA-Z0-9_-]+/g);
+  if (classMatches) {
+    classMatches.forEach((cls) => classNames.add(cls));
+  }
+
+  // Match ID selectors like #main-header, #site-footer
+  const idMatches = cssText.match(/#[a-zA-Z0-9_-]+/g);
+  if (idMatches) {
+    idMatches.forEach((id) => classNames.add(id));
+  }
+
+  return [...classNames]; // Convert Set to array
+};
+
 
 /**
  * Fetches a webpage using Playwright and returns the HTML content, cookies, headers, and certificate issuer.
@@ -25,27 +58,34 @@ const chromiumArgs = [
  * @param {Object} [browserInstance] - An optional Playwright browser instance.
  * @returns {Promise<Object>} - An object containing the HTML content, cookies, headers, and certificate issuer.
  */
-const playwrightFetch = async (url, config, browserInstance) => {
+const playwrightFetch = async (url, config, browserPool) => {
   const start = performance.now();
+  let browser, context;
+
+  console.log(config);
+
   try {
-    const browser =
-      browserInstance ||
-      (await playwrightChromium.launch({
+    if (browserPool) {
+      // ✅ Always use browser pool instead of launching a new browser
+      const { browser: b, context: c } = await browserPool.getBrowserContext();
+      browser = b;
+      context = c;
+    } else {
+      // ❌ Fallback (should rarely happen)
+      browser = await playwrightChromium.launch({
         ...config.browser,
         args: chromiumArgs,
-      }));
+      });
+      context = await browser.newContext();
+    }
 
-    const page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(60000); // Set navigation timeout to 60 seconds
+    const page = await context.newPage();
+    await page.setDefaultNavigationTimeout(60000);
 
     // Disable images and other unnecessary resources
     await page.route("**/*", (route) => {
       const resourceType = route.request().resourceType();
-      if (
-        resourceType === "image" ||
-        resourceType === "font" ||
-        resourceType === "media"
-      ) {
+      if (["image", "font", "media"].includes(resourceType)) {
         route.abort();
       } else {
         route.continue();
@@ -54,6 +94,8 @@ const playwrightFetch = async (url, config, browserInstance) => {
 
     let mainResponse = null;
     let certIssuer = null;
+
+    await page.goto(url, { waitUntil: "domcontentloaded" });
 
     page.on("response", async (response) => {
       if (response.url() === url) {
@@ -65,28 +107,114 @@ const playwrightFetch = async (url, config, browserInstance) => {
       }
     });
 
-    await page.goto(url, { waitUntil: "domcontentloaded" });
-    const HTML = await page.content();
-    const cookies = await page.context().cookies();
-    const headers = mainResponse ? mainResponse.headers() : {};
-
-    // Close the browser if not reusing
-    if (!config.reuseBrowser && !browserInstance) {
-      await browser.close();
+    // Scroll to the bottom of the page if specified in the config
+    if (config.scrollToBottom) {
+      await page.evaluate(async () => {
+        await new Promise((resolve) => {
+          const scrollInterval = setInterval(() => {
+            window.scrollBy(0, window.innerHeight);
+            if (
+              window.innerHeight + window.scrollY >=
+              document.body.offsetHeight
+            ) {
+              clearInterval(scrollInterval);
+              resolve();
+            }
+          }, 100);
+        });
+      });
     }
 
-    return {
+    // Wait for minTime if specified
+    if (config.minTime) {
+      const elapsed = performance.now() - start;
+      if (elapsed < config.minTime) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, config.minTime - elapsed)
+        );
+      }
+    }
+
+    // Extract all JavaScript properties
+    const jsProperties = await page.evaluate(() => {
+      function extractProperties(
+        obj,
+        depth = 0,
+        maxDepth = 3,
+        seen = new WeakSet()
+      ) {
+        if (
+          !obj ||
+          typeof obj !== "object" ||
+          seen.has(obj) ||
+          depth > maxDepth
+        )
+          return {};
+        seen.add(obj);
+
+        const extracted = {};
+        for (const key in obj) {
+          try {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+              const value = obj[key];
+
+              if (typeof value === "function") {
+                extracted[key] = "Function()"; // Store function signatures
+              } else if (typeof value === "object" && value !== null) {
+                extracted[key] = extractProperties(
+                  value,
+                  depth + 1,
+                  maxDepth,
+                  seen
+                ); // Recursively extract objects
+              } else {
+                extracted[key] = value;
+              }
+            }
+          } catch (err) {
+            extracted[key] = `Error: ${err.message}`; // Catch security restrictions
+          }
+        }
+        return extracted;
+      }
+
+      return extractProperties(window);
+    });
+
+    const HTML = await page.content();
+    const cookies = await page.context().cookies();
+    const headers = await page.evaluate(async () => {
+      const response = await fetch(window.location.href, { method: "GET" });
+      return Object.fromEntries(response.headers.entries());
+    });
+
+    const payload = {
+      url,
+      headers,
       HTML,
       cookies,
-      headers,
-      certIssuer,
+      js: jsProperties,
       page,
       browser,
       duration: performance.now() - start,
-    };
+    }
+
+    return payload;
   } catch (error) {
     console.error(`Playwright fetch error: ${error.message}`);
     throw error;
+  } finally {
+    if (browserPool) {
+      // ✅ Always release browser context back to the pool
+      if (browser && context) {
+        await browserPool.releaseBrowserContext(browser, context);
+      }
+    } else {
+      // ❌ Close browser manually if not using the pool
+      if (browser) {
+        await browser.close();
+      }
+    }
   }
 };
 
@@ -135,7 +263,7 @@ const basicFetch = async (url) => {
  * @param {string[]} cssUrls - An array of CSS file URLs.
  * @returns {Promise<string>} - A concatenated string of CSS contents.
  */
-const fetchCSSContent = async (cssUrls, timeout = 3000) => {
+const fetchCSSContent = async (cssUrls, errors, logError, timeout = 3000) => {
   const fetchWithTimeout = (url, options, timeout) => {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
@@ -158,35 +286,33 @@ const fetchCSSContent = async (cssUrls, timeout = 3000) => {
     try {
       const response = await fetchWithTimeout(url, { agent }, timeout);
       if (!response.ok) {
-        console.error(`Failed to fetch CSS from ${url}: ${response.status}`);
-        return ""; // Return an empty string on failure
+        logError(
+          errors,
+          "fetchCSSContent",
+          `Failed to fetch CSS from ${url}: ${response.status}`
+        );
+        return "";
       }
-      const text = await response.text();
-      return text;
+      return await response.text();
     } catch (err) {
-      console.error(`Error fetching CSS from ${url}: ${err.message}`);
-      return ""; // Return an empty string on error
+      logError(
+        errors,
+        "fetchCSSContent",
+        `Error fetching CSS from ${url}: ${err.message}`
+      );
+      return "";
     }
   };
 
-  // Create a custom agent that ignores SSL certificate errors
-  const agent = new https.Agent({
-    rejectUnauthorized: false,
-  });
+  const agent = new https.Agent({ rejectUnauthorized: false });
 
   try {
     const cssContents = await Promise.all(
-      cssUrls.map((url) =>
-        fetchSingleCSS(url).catch((err) => {
-          console.error(`Caught error for ${url}: ${err.message}`);
-          return ""; // Ensure we return an empty string on error
-        })
-      )
+      cssUrls.map((url) => fetchSingleCSS(url))
     );
     return cssContents.join("\n");
   } catch (error) {
-    console.error(`CSS fetch error in Promise.all: ${error.message}`);
-    // Ensure the function never fails by returning an empty string or partial result
+    logError(errors, "fetchCSSContent", `Promise.all failed: ${error.message}`);
     return "";
   }
 };
@@ -197,17 +323,15 @@ const fetchCSSContent = async (cssUrls, timeout = 3000) => {
  * @param {string[]} jsUrls - An array of JS file URLs.
  * @returns {Promise<string>} - A concatenated string of JS contents.
  */
-const fetchJSContent = async (scriptUrls, timeout = 3000) => {
+const fetchJSContent = async (scriptUrls, errors, logError, timeout = 3000) => {
   try {
-    // Create a custom agent that ignores SSL certificate errors
-    const agent = new https.Agent({
-      rejectUnauthorized: false,
-    });
+    const agent = new https.Agent({ rejectUnauthorized: false });
 
     const fetchWithTimeout = (url, options, timeout) => {
       return new Promise((resolve, reject) => {
         const timer = setTimeout(() => {
           reject(new Error("Request timed out"));
+          logError(errors, "fetchJSContent", `Request timed out for ${url}`);
         }, timeout);
 
         fetch(url, options)
@@ -224,27 +348,33 @@ const fetchJSContent = async (scriptUrls, timeout = 3000) => {
 
     const jsContents = await Promise.all(
       scriptUrls.map(async (url) => {
-        // Skip URLs with the "blob:" scheme
-        if (url.startsWith("blob:")) {
-          return "";
-        }
+        if (url.startsWith("blob:")) return "";
+
         try {
           const response = await fetchWithTimeout(url, { agent }, timeout);
           if (!response.ok) {
-            console.error(`Failed to fetch JS: ${url}: ${response.status}`);
-            return ""; // Return an empty string on failure
+            logError(
+              errors,
+              "fetchJSContent",
+              `Failed to fetch JS from ${url}: ${response.status}`
+            );
+            return "";
           }
           return await response.text();
         } catch (err) {
-          console.error(`Failed to fetch JS: ${url}: ${err.message}`);
-          return ""; // Return an empty string on failure
+          logError(
+            errors,
+            "fetchJSContent",
+            `Failed to fetch JS from ${url}: ${err.message}`
+          );
+          return "";
         }
       })
     );
 
     return jsContents.join("\n");
   } catch (error) {
-    console.error(`JS fetch error: ${error.message}`);
+    logError(errors, "fetchJSContent", `JS fetch error: ${error.message}`);
     throw error;
   }
 };
@@ -261,13 +391,13 @@ const getHTML = async (url, config) => {
 
   async function targetPlaywrightFetch() {
     try {
-      const { HTML, cookies, headers, certIssuer, page, browser, duration } =
-        await playwrightFetch(url, config);
-      const $ = cheerio.load(HTML);
-      return { $, HTML, headers, cookies, certIssuer, page, browser, duration };
+      const response = await playwrightFetch(url, config);
+      const $ = cheerio.load(response.HTML);
+      
+      return { ...response, $ }; // ✅ Spread response to keep all properties, including `js`
     } catch (error) {
       console.error(
-        `Puppeteer fetch failed, falling back to basic fetch. Error: ${error.message}`
+        `Playwright fetch failed, falling back to basic fetch. Error: ${error.message}`
       );
       return targetBasicFetch();
     }
@@ -372,133 +502,106 @@ const runHelpers = async (url, dom, config) => {
  * @param {Object} [config={ browser: { headless: true } }] - The configuration object for fetching.
  * @returns {Promise<Object>} - An object containing various extracted data including meta tags, scripts, CSS, headers, cookies, DNS records, and certificate issuer.
  */
-const extractTechnologies = async (url, config) => {
+const extractTechnologies = async (url, config = {}) => {
+  const errors = [];
+  const logError = createLogger(config);
+
   try {
+    const response = await getHTML(url, config, config.browserPool).catch((err) => {
+      logError(errors, "getHTML", err.message);
+      throw err;
+    });
+
     const {
       $,
       HTML,
+      js,
       headers,
       cookies,
       certIssuer,
       page,
       browser,
       duration: fetchDuration,
-    } = await getHTML(url, config);
-
-    console.log("Fetched HTML for", url);
-
-    const { helpers, duration: helperDuration } = await runHelpers(
-      url,
-      $,
-      config.helpers
-    );
-
-    const baseUrl = new URL(url);
-
-    const scriptSrc = [];
-    $("script[src]").each((i, elem) => {
-      const src = $(elem).attr("src");
-      const fullSrc = new URL(src, baseUrl).toString();
-      scriptSrc.push(fullSrc);
-    });
-
-    const inlineScripts = [];
-    $("script:not([src])").each((i, elem) => {
-      inlineScripts.push(JSON.stringify($(elem).html()));
-    });
-
-    const cssUrls = [];
-    $('link[rel="stylesheet"]').each((i, elem) => {
-      const href = $(elem).attr("href");
-      const fullHref = new URL(href, baseUrl).toString();
-      cssUrls.push(fullHref);
-    });
-
-    const externalCssContent = await fetchCSSContent(cssUrls);
-    const externalJsContent = await fetchJSContent(scriptSrc);
-
-    const inlineStyles = [];
-    $("style").each((i, elem) => inlineStyles.push($(elem).html()));
-
-    const cssContent = externalCssContent
-      ? externalCssContent + "\n" + inlineStyles.join("\n")
-      : inlineStyles.join("\n");
-
-    const meta = {};
-    $("meta").each((i, elem) => {
-      const name = $(elem).attr("name") || $(elem).attr("property");
-      if (name) {
-        if (!meta[name]) meta[name] = [];
-        meta[name].push($(elem).attr("content"));
-      }
-    });
-
-    const cookiesParsed = {};
-    cookies.forEach((cookie) => {
-      cookiesParsed[cookie.name] = [
-        cookie.value,
-        cookie.domain,
-        cookie.path,
-        cookie.expires,
-        cookie.size,
-        cookie.httpOnly,
-        cookie.secure,
-        cookie.session,
-        cookie.sameSite,
-      ];
-    });
-
-    const formattedHeaders = {};
-    Object.entries(headers).forEach(([key, value]) => {
-      if (!formattedHeaders[key]) formattedHeaders[key] = [];
-      formattedHeaders[key].push(value);
-    });
-
-    const hostname = new URL(url).hostname;
-    const reducedHostName = hostname
-      .replace(/^www\./, "")
-      .replace(/^http\./, "")
-      .replace(/^https\./, "");
-    const dnsRecords = { TXT: [], MX: [] };
-    try {
-      dnsRecords.TXT = await dns.resolveTxt(reducedHostName);
-      dnsRecords.MX = await dns.resolveMx(reducedHostName);
-    } catch (error) {
-      console.error(`DNS lookup error: ${error.message}`);
-    }
-
-    // const jsTechnologies = page ? await getJs(page, Wappalyzer.technologies) : [];
+    } = response;
 
     if (browser) {
       await browser.close();
     }
 
+    const { helpers, duration: helperDuration } = await runHelpers(
+      url,
+      $,
+      config,
+      logError,
+      errors
+    ).catch((err) => {
+      logError(errors, "runHelpers", err.message);
+      return { helpers: [], duration: 0 };
+    });
+
+    const scriptSrc = [];
+    $("script[src]").each((i, elem) => {
+      try {
+        scriptSrc.push(new URL($(elem).attr("src"), url).toString());
+      } catch (err) {
+        logError(
+          errors,
+          "extractTechnologies",
+          `Failed to parse script URL: ${err.message}`
+        );
+      }
+    });
+
+    const cssUrls = [];
+    $('link[rel="stylesheet"]').each((i, elem) => {
+      try {
+        cssUrls.push(new URL($(elem).attr("href"), url).toString());
+      } catch (err) {
+        logError(
+          errors,
+          "extractTechnologies",
+          `Failed to parse CSS URL: ${err.message}`
+        );
+      }
+    });
+
+    const externalCssContent = await fetchCSSContent(
+      cssUrls,
+      errors,
+      logError
+    ).catch(() => "");
+
+    const externalJsContent = await fetchJSContent(
+      scriptSrc,
+      errors,
+      logError
+    ).catch(() => "");
+
+    const css = await extractCSSClasses(externalCssContent);
+
     return {
       url,
-      meta,
+      js,
       scriptSrc,
-      // js: externalJsContent,
-      scripts: inlineScripts,
-      css: cssContent,
-      html: HTML,
-      headers: formattedHeaders,
-      cookies: cookiesParsed,
-      dns: {
-        txt: dnsRecords.TXT,
-        mx: dnsRecords.MX,
-      },
-      text: externalJsContent,
+      scripts: externalJsContent,
+      css: externalCssContent,
+      headers,
+      cookies,
       certIssuer,
       dom: $,
       helpers,
       performance: {
         fetchDuration,
         helperDuration,
+        errors, // Attach collected errors
       },
-      // jsTechnologies
     };
   } catch (error) {
-    console.error(`Error extracting data: ${error.message}`);
+    logError(
+      errors,
+      "extractTechnologies",
+      `Error extracting data: ${error.message}`
+    );
     throw error;
   }
 };
