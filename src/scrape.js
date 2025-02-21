@@ -62,8 +62,6 @@ const playwrightFetch = async (url, config, browserPool) => {
   const start = performance.now();
   let browser, context;
 
-  console.log(config);
-
   try {
     if (browserPool) {
       // ✅ Always use browser pool instead of launching a new browser

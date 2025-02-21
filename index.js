@@ -75,7 +75,7 @@ class Wappalyzer {
         silent: true,
       },
       browser: {
-        headless: false,
+        headless: true,
         maxBrowsers: 2, // ✅ Ensure max browser control
         maxContextsPerBrowser: 1,
       },
