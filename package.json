@@ -1,6 +1,6 @@
 {
   "name": "@ryntab/wappalyzer-node",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "A node.js wrapper for Wappalyzer",
   "type": "module",
   "repository": {
@@ -11,6 +11,11 @@
     "start": "node index.js",
     "upload-icons": "node upload-images.js"
   },
+  "files": [
+    "index.js",
+    "src/",
+    "src/scrape.js"
+  ],
   "author": "ryntab",
   "homepage": "",
   "license": "ISC",
@@ -23,6 +28,7 @@
     "mime": "^4.0.4",
     "node-fetch": "^3.3.2",
     "npm": "^10.8.2",
+    "playwright": "^1.50.1",
     "user-agents": "^1.1.274"
   },
   "devDependencies": {
