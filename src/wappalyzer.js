@@ -66,7 +66,7 @@ function benchmarkSummary() {
       .slice(0, 5),
   });
 }
-
+ 
 const Wappalyzer = {
   technologies: [],
   categories: [],
@@ -158,8 +158,8 @@ const Wappalyzer = {
               confidence = Math.min(100, confidence + pattern.confidence);
               version =
                 _version.length > version.length &&
-                _version.length <= 15 &&
-                (parseInt(_version, 10) || 0) < 10000 // Ignore long numeric strings like timestamps
+                  _version.length <= 15 &&
+                  (parseInt(_version, 10) || 0) < 10000 // Ignore long numeric strings like timestamps
                   ? _version
                   : version;
               rootPath = rootPath || _rootPath || undefined;
@@ -218,7 +218,7 @@ const Wappalyzer = {
     // For each helper join in to the resolved technologies
     if (helpers) {
       helpers.forEach((helper) => {
-       // Find the matching technology
+        // Find the matching technology
         const resolvedTech = sortedResolved.find(
           (tech) => tech.name === helper.name
         );
@@ -347,49 +347,35 @@ const Wappalyzer = {
    * @param {*} param0
    */
   analyze(items, technologies = Wappalyzer.technologies) {
-    benchmarks = [];
+    if (!technologies.length) return [];
 
     const oo = Wappalyzer.analyzeOneToOne;
     const om = Wappalyzer.analyzeOneToMany;
     const mm = Wappalyzer.analyzeManyToMany;
 
     const relations = {
-      certIssuer: oo,
-      cookies: mm,
-      css: oo,
-      dns: mm,
-      headers: mm,
-      html: oo,
-      meta: mm,
-      probe: mm,
-      robots: oo,
-      scriptSrc: om,
-      scripts: oo,
-      text: oo,
-      url: oo,
-      xhr: oo,
+      certIssuer: oo, cookies: mm, css: oo, dns: mm, headers: mm,
+      html: oo, meta: mm, probe: mm, robots: oo, scriptSrc: om,
+      scripts: oo, text: oo, url: oo, xhr: oo,
     };
 
     try {
-      const detections = technologies
-        .map((technology) =>
-          Object.keys(relations)
-            .map(
-              (type) =>
-                items[type] && relations[type](technology, type, items[type])
-            )
-            .flat()
-        )
-        .flat()
-        .filter((technology) => technology);
+      const detections = technologies.flatMap((technology) => {
+        return Object.keys(relations).reduce((acc, type) => {
+          if (!items[type]) return acc; // Skip empty item types
 
-      benchmarkSummary();
+          const results = relations[type](technology, type, items[type]);
+          return results.length ? acc.concat(results) : acc;
+        }, []);
+      });
 
       return detections;
     } catch (error) {
+      console.error("❌ Detection Error:", error);
       throw new Error(error.message || error.toString());
     }
   },
+
 
   /**
    * Extract technologies from data collected.
@@ -439,9 +425,9 @@ const Wappalyzer = {
         dom: transform(
           typeof dom === "string" || Array.isArray(dom)
             ? toArray(dom).reduce(
-                (dom, selector) => ({ ...dom, [selector]: { exists: "" } }),
-                {}
-              )
+              (dom, selector) => ({ ...dom, [selector]: { exists: "" } }),
+              {}
+            )
             : dom,
           true,
           false
@@ -600,13 +586,13 @@ const Wappalyzer = {
             attrs.regex = new RegExp(
               isRegex
                 ? attr
-                    // Escape slashes
-                    .replace(/\//g, "\\/")
-                    // Optimise quantifiers for long strings
-                    .replace(/\\\+/g, "__escapedPlus__")
-                    .replace(/\+/g, "{1,250}")
-                    .replace(/\*/g, "{0,250}")
-                    .replace(/__escapedPlus__/g, "\\+")
+                  // Escape slashes
+                  .replace(/\//g, "\\/")
+                  // Optimise quantifiers for long strings
+                  .replace(/\\\+/g, "__escapedPlus__")
+                  .replace(/\+/g, "{1,250}")
+                  .replace(/\*/g, "{0,250}")
+                  .replace(/__escapedPlus__/g, "\\+")
                 : "",
               "i"
             );
@@ -697,21 +683,23 @@ const Wappalyzer = {
    * @param {Array} items
    */
   analyzeManyToMany(technology, types, items = {}) {
-    const [type, ...subtypes] = types.split(".");
+    if (!items || !technology[types.split(".")[0]]) return [];
 
-    return Object.keys(technology[type]).reduce((technologies, key) => {
-      const patterns = technology[type][key] || [];
-      const values = items[key] || [];
+    const [type, ...subtypes] = types.split(".");
+    const techPatterns = technology[type];
+
+    return Object.keys(techPatterns).reduce((technologies, key) => {
+      const values = Array.isArray(items[key]) ? items[key] : items[key] ? [items[key]] : null;
+      if (!values) return technologies; // Skip if no matching values
+
+      const patterns = techPatterns[key] || [];
 
       patterns.forEach((_pattern) => {
-        const pattern = (subtypes || []).reduce(
-          (pattern, subtype) => pattern[subtype] || {},
-          _pattern
-        );
+        const pattern = subtypes.reduce((p, subtype) => p?.[subtype] || {}, _pattern);
+        if (!pattern.regex) return; // Skip if no valid regex pattern
 
         values.forEach((value) => {
-          const startTime = Date.now();
-
+          const startTime = performance.now();
           const matches = pattern.regex.exec(value);
 
           if (matches) {
@@ -725,9 +713,9 @@ const Wappalyzer = {
               },
               version: Wappalyzer.resolveVersion(pattern, value),
             });
-          }
 
-          benchmark(Date.now() - startTime, pattern, value, technology);
+            benchmark(performance.now() - startTime, pattern, value, technology);
+          }
         });
       });
 
@@ -755,8 +743,8 @@ const Wappalyzer = {
 
         return technology
           ? Wappalyzer.analyzeManyToMany(technology, "js", {
-              [chain]: [value],
-            })
+            [chain]: [value],
+          })
           : [];
       })
       .flat();
