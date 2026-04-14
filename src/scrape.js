@@ -1,26 +1,13 @@
 import fetch from "node-fetch";
-import UserAgent from "user-agents";
 import * as cheerio from "cheerio";
-import dns from "dns/promises";
 import https from "https";
-import { chromium as playwrightChromium } from "playwright"; // Correct import
 import Wordpress_Helpers from "./helpers/Wordpress.js";
 import Shopify_Helpers from "./helpers/Shopify.js";
 import Magento_Helpers from "./helpers/Magento.js";
 
-const chromiumArgs = [
-  "--no-sandbox",
-  "--no-zygote",
-  "--disable-gpu",
-  "--ignore-certificate-errors",
-  "--allow-running-insecure-content",
-  "--disable-web-security",
-  "--disable-http2", // 🔧 Disable HTTP/2 support
-];
-
 const createLogger = (config = {}) => {
   return (errors, functionName, message) => {
-    if (!config.debug.enabled) return;
+    if (!config.debug?.enabled) return;
 
     if (!config.debug.silent) {
       console.error(`❌ [${functionName}] ${message}`);
@@ -50,7 +37,10 @@ const extractCSSClasses = (cssText) => {
 };
 
 
+/**** REMOVED: playwrightFetch — callers now supply their own page ****/
+
 /**
+ * @deprecated Kept as dead code anchor — do not call directly.
  * Fetches a webpage using Playwright and returns the HTML content, cookies, headers, and certificate issuer.
  *
  * @param {string} url - The URL of the webpage to fetch.
@@ -604,4 +594,254 @@ const extractTechnologies = async (url, config = {}) => {
   }
 };
 
-export { getHTML, extractTechnologies };
+/**
+ * Extracts technologies from an already-open Puppeteer/Playwright page.
+ *
+ * @param {Object} page - Puppeteer or Playwright page object.
+ * @param {string} [url] - Optional URL override.
+ * @param {Object} [config={}] - Configuration object.
+ * @returns {Promise<Object>} - Payload ready for Wappalyzer analysis.
+ */
+const extractTechnologiesFromPage = async (page, url, config = {}) => {
+  const errors = [];
+  const logError = createLogger(config);
+
+  if (!page || typeof page.content !== "function") {
+    throw new Error("A valid Puppeteer or Playwright page is required");
+  }
+
+  const start = performance.now();
+
+  try {
+    const pageUrl =
+      url || (typeof page.url === "function" ? page.url() : "") || "about:blank";
+
+    const HTML = await page.content();
+    const $ = cheerio.load(HTML);
+
+    const js = await page
+      .evaluate(() => {
+        function extractProperties(
+          obj,
+          depth = 0,
+          maxDepth = 3,
+          seen = new WeakSet()
+        ) {
+          if (
+            !obj ||
+            typeof obj !== "object" ||
+            seen.has(obj) ||
+            depth > maxDepth
+          ) {
+            return {};
+          }
+
+          seen.add(obj);
+          const extracted = {};
+
+          for (const key in obj) {
+            try {
+              if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                const value = obj[key];
+
+                if (typeof value === "function") {
+                  extracted[key] = "Function()";
+                } else if (typeof value === "object" && value !== null) {
+                  extracted[key] = extractProperties(
+                    value,
+                    depth + 1,
+                    maxDepth,
+                    seen
+                  );
+                } else {
+                  extracted[key] = value;
+                }
+              }
+            } catch (err) {
+              extracted[key] = `Error: ${err.message}`;
+            }
+          }
+
+          return extracted;
+        }
+
+        return extractProperties(window);
+      })
+      .catch((err) => {
+        logError(errors, "extractTechnologiesFromPage", `JS extraction failed: ${err.message}`);
+        return {};
+      });
+
+    const headers = await page
+      .evaluate(async () => {
+        try {
+          const response = await fetch(window.location.href, { method: "GET" });
+          return Object.fromEntries(response.headers.entries());
+        } catch {
+          return {};
+        }
+      })
+      .catch((err) => {
+        logError(errors, "extractTechnologiesFromPage", `Header extraction failed: ${err.message}`);
+        return {};
+      });
+
+    let cookies = [];
+    try {
+      if (typeof page.context === "function") {
+        cookies = await page.context().cookies();
+      } else if (typeof page.cookies === "function") {
+        cookies = await page.cookies();
+      }
+    } catch (err) {
+      logError(errors, "extractTechnologiesFromPage", `Cookie extraction failed: ${err.message}`);
+    }
+
+    const { helpers, duration: helperDuration } = await runHelpers(
+      pageUrl,
+      $,
+      config,
+      logError,
+      errors
+    ).catch((err) => {
+      logError(errors, "runHelpers", err.message);
+      return { helpers: [], duration: 0 };
+    });
+
+    const scriptSrc = [];
+    $("script[src]").each((i, elem) => {
+      try {
+        scriptSrc.push(new URL($(elem).attr("src"), pageUrl).toString());
+      } catch (err) {
+        logError(
+          errors,
+          "extractTechnologiesFromPage",
+          `Failed to parse script URL: ${err.message}`
+        );
+      }
+    });
+
+    const cssUrls = [];
+    $('link[rel="stylesheet"]').each((i, elem) => {
+      try {
+        cssUrls.push(new URL($(elem).attr("href"), pageUrl).toString());
+      } catch (err) {
+        logError(
+          errors,
+          "extractTechnologiesFromPage",
+          `Failed to parse CSS URL: ${err.message}`
+        );
+      }
+    });
+
+    const externalCssContent = await fetchCSSContent(
+      cssUrls,
+      errors,
+      logError
+    ).catch(() => "");
+
+    const externalJsContent = await fetchJSContent(
+      scriptSrc,
+      errors,
+      logError
+    ).catch(() => "");
+
+    return {
+      url: pageUrl,
+      js,
+      scriptSrc,
+      scripts: externalJsContent,
+      css: externalCssContent,
+      headers,
+      cookies,
+      certIssuer: null,
+      dom: $,
+      helpers,
+      performance: {
+        fetchDuration: performance.now() - start,
+        helperDuration,
+        errors,
+      },
+    };
+  } catch (error) {
+    logError(
+      errors,
+      "extractTechnologiesFromPage",
+      `Error extracting data: ${error.message}`
+    );
+    throw error;
+  }
+};
+
+/**
+ * Extracts technologies from raw HTML.
+ *
+ * @param {string} html - Raw HTML string.
+ * @param {object} [opts]
+ * @param {string}   [opts.url="about:blank"] - Base URL for resolving relative links.
+ * @param {object}   [opts.headers={}]        - Response headers.
+ * @param {Array}    [opts.cookies=[]]        - Cookies array.
+ * @returns {Promise<Object>} - Payload ready for WappalyzerCore analysis.
+ */
+const extractTechnologiesFromHTML = async (
+  html,
+  { url = "about:blank", headers = {}, cookies = [] } = {}
+) => {
+  const config = { helpers: { run: true }, debug: { enabled: false } };
+  const errors = [];
+  const logError = createLogger(config);
+  const start = performance.now();
+
+  try {
+    const $ = cheerio.load(html);
+
+    const scriptSrc = [];
+    $("script[src]").each((i, elem) => {
+      try {
+        scriptSrc.push(new URL($(elem).attr("src"), url).toString());
+      } catch (err) {
+        logError(errors, "extractTechnologiesFromHTML", `Failed to parse script URL: ${err.message}`);
+      }
+    });
+
+    const cssUrls = [];
+    $('link[rel="stylesheet"]').each((i, elem) => {
+      try {
+        cssUrls.push(new URL($(elem).attr("href"), url).toString());
+      } catch (err) {
+        logError(errors, "extractTechnologiesFromHTML", `Failed to parse CSS URL: ${err.message}`);
+      }
+    });
+
+    const externalCssContent = await fetchCSSContent(cssUrls, errors, logError).catch(() => "");
+    const externalJsContent = await fetchJSContent(scriptSrc, errors, logError).catch(() => "");
+
+    const { helpers, duration: helperDuration } = await runHelpers(url, $, config).catch((err) => {
+      logError(errors, "runHelpers", err.message);
+      return { helpers: [], duration: 0 };
+    });
+
+    return {
+      url,
+      js: {},
+      scriptSrc,
+      scripts: externalJsContent,
+      css: externalCssContent,
+      headers,
+      cookies,
+      certIssuer: null,
+      dom: $,
+      helpers,
+      performance: {
+        fetchDuration: performance.now() - start,
+        helperDuration,
+        errors,
+      },
+    };
+  } catch (error) {
+    logError(errors, "extractTechnologiesFromHTML", `Error extracting data: ${error.message}`);
+    throw error;
+  }
+};
+
+export { extractTechnologiesFromPage, extractTechnologiesFromHTML };

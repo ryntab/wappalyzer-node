@@ -8,7 +8,6 @@
     "url": "https://github.com/ryntab/wappalyzer-wrapper"
   },
   "scripts": {
-    "start": "node index.js",
     "upload-icons": "node upload-images.js"
   },
   "files": [
@@ -20,19 +19,9 @@
   "homepage": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1664.0",
-    "cheerio": "^1.0.0-rc.12",
-    "deepmerge": "^4.3.1",
-    "dotenv": "^16.4.5",
-    "install": "^0.13.0",
-    "mime": "^4.0.4",
-    "node-fetch": "^3.3.2",
-    "npm": "^10.8.2",
-    "playwright": "^1.50.1",
-    "user-agents": "^1.1.274"
+    "cheerio": "^1.0.0-rc.12"
   },
   "devDependencies": {
-    "@playwright/test": "^1.45.3",
     "@types/node": "^22.1.0"
   }
 }
