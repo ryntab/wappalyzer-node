@@ -11,17 +11,13 @@ class Wappalyzer {
     if (this.#isInitialized) return;
     if (this.#initializing) return this.#initializing;
 
-    console.log("🔧 Initializing Wappalyzer...");
-
     this.#initializing = (async () => {
       try {
         const techLib = await load_technologies();
         await WappalyzerCore.setTechnologies(techLib);
         await WappalyzerCore.setCategories(categories);
         this.#isInitialized = true;
-        console.log("✅ Wappalyzer initialized");
       } catch (error) {
-        console.error("❌ Failed to initialize Wappalyzer:", error);
         throw error;
       } finally {
         this.#initializing = null;
@@ -37,7 +33,30 @@ class Wappalyzer {
       detections: analysis,
       helpers: payload.helpers,
     });
-    return { technologies, performance: payload.performance };
+
+    const helperEntries = Array.isArray(payload.helpers)
+      ? payload.helpers.filter(Boolean)
+      : [];
+    const helpersByName = helperEntries.reduce((acc, helper) => {
+      if (typeof helper?.name === "string" && helper.name) {
+        acc[helper.name] = helper;
+      }
+      return acc;
+    }, {});
+    const helperSummary = {
+      ran: helperEntries.length > 0 || Number(payload?.performance?.helperDuration) > 0,
+      total: helperEntries.length,
+      detected: helperEntries.filter((h) => typeof h?.name === "string").map((h) => h.name),
+      duration: Number(payload?.performance?.helperDuration || 0),
+    };
+    
+    return {
+      technologies,
+      performance: payload.performance,
+      helperSummary,
+      helpers: helperEntries,
+      helpersByName,
+    };
   }
 
   /**
@@ -65,7 +84,6 @@ class Wappalyzer {
       const payload = await extractTechnologiesFromPage(page, pageUrl);
       return await this.#resolve(payload);
     } catch (error) {
-      console.error("❌ Error during page scan:", error);
       return { error: "Failed to scan page technologies" };
     }
   }
@@ -90,7 +108,6 @@ class Wappalyzer {
       const payload = await extractTechnologiesFromHTML(html, { url, headers, cookies });
       return await this.#resolve(payload);
     } catch (error) {
-      console.error("❌ Error during HTML scan:", error);
       return { error: "Failed to scan HTML technologies" };
     }
   }

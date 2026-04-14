@@ -142,10 +142,7 @@ const Wordpress_Helpers = {
             const cssFetches = cssUrlsToCheck.map(attemptURL =>
                 fetch(attemptURL)
                     .then(response => response.ok ? response.text() : null)
-                    .catch(error => {
-                        console.error(`Error fetching ${attemptURL}:`, error);
-                        return null;
-                    })
+                    .catch(() => null)
             );
 
             const screenshotUrlsToCheck = [
@@ -156,10 +153,7 @@ const Wordpress_Helpers = {
             const screenshotFetches = screenshotUrlsToCheck.map(attemptURL =>
                 fetch(attemptURL)
                     .then(response => response.ok ? attemptURL : null)
-                    .catch(error => {
-                        console.error(`Error fetching ${attemptURL}:`, error);
-                        return null;
-                    })
+                    .catch(() => null)
             );
 
             try {
@@ -179,14 +173,10 @@ const Wordpress_Helpers = {
                         ...metadata,
                         duration: performance.now() - start,
                     };
-                } else {
-                    console.log('No valid style.css found at the provided URLs');
                 }
-            } catch (error) {
-                console.error('Error during fetching process:', error);
+            } catch {
+                return null;
             }
-        } else {
-            console.log('No theme detected');
         }
     },
 

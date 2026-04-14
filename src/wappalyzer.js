@@ -22,50 +22,6 @@ function benchmark(duration, pattern, value = "", technology) {
     technology: technology.name,
   });
 }
-
-function benchmarkSummary() {
-  if (!benchmarkEnabled) {
-    return;
-  }
-
-  const totalPatterns = Object.values(benchmarks).length;
-  const totalDuration = Object.values(benchmarks).reduce(
-    (sum, { duration }) => sum + duration,
-    0
-  );
-
-  // eslint-disable-next-line no-console
-  console.log({
-    totalPatterns,
-    totalDuration,
-    averageDuration: Math.round(totalDuration / totalPatterns),
-    slowestTechnologies: Object.values(
-      benchmarks.reduce((benchmarks, { duration, technology }) => {
-        if (benchmarks[technology]) {
-          benchmarks[technology].duration += duration;
-        } else {
-          benchmarks[technology] = { technology, duration };
-        }
-
-        return benchmarks;
-      }, {})
-    )
-      .sort(({ duration: a }, { duration: b }) => (a > b ? -1 : 1))
-      .filter(({ duration }) => duration)
-      .slice(0, 5)
-      .reduce(
-        (technologies, { technology, duration }) => ({
-          ...technologies,
-          [technology]: duration,
-        }),
-        {}
-      ),
-    slowestPatterns: Object.values(benchmarks)
-      .sort(({ duration: a }, { duration: b }) => (a > b ? -1 : 1))
-      .filter(({ duration }) => duration)
-      .slice(0, 5),
-  });
-}
  
 const Wappalyzer = {
   technologies: [],
@@ -97,8 +53,6 @@ const Wappalyzer = {
    */
   getRequiredTechnologies: (requires, categoryRequires) => {
     const requiredTechnologies = new Set();
-
-    console.log(requires, categoryRequires);
 
     if (!requires || requires.length === 0) {
       return;
@@ -371,7 +325,6 @@ const Wappalyzer = {
 
       return detections;
     } catch (error) {
-      console.error("❌ Detection Error:", error);
       throw new Error(error.message || error.toString());
     }
   },

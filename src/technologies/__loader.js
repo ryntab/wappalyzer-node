@@ -18,10 +18,7 @@ const load_technologies = async () => {
             return JSON.parse(file);
         } catch (error) {
             if (error.code === 'ENOENT') {
-                console.warn(`File not found: ${filePath}`);
                 return {};
-            } else {
-                console.error(`Failed to load file: ${filePath}`);
             }
             throw error;
         }

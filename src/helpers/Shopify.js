@@ -56,8 +56,6 @@ const Shopify_Helpers = {
                 themeMetadata: metadata,
                 duration: performance.now() - start + parseDuration,
             };
-        } else {
-            console.log('No Boomerang script detected');
         }
     },
 
