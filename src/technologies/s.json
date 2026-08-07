@@ -52,6 +52,7 @@
     ],
     "cpe": "cpe:2.3:a:sap:netweaver_application_server:*:*:*:*:*:*:*:*",
     "headers": {
+      "Sap-Server": "^true$",
       "Server": "SAP NetWeaver Application Server"
     },
     "icon": "SAP.svg",
@@ -447,6 +448,20 @@
     "scriptSrc": "embed\\.sendtonews\\.com/",
     "scripts": "embed\\.sendtonews\\.com/",
     "website": "https://www.stnvideo.com"
+  },
+  "STRIGHT": {
+    "cats": [
+      67
+    ],
+    "description": "STRIGHT is a consent management platform for cookie consent, privacy disclosures, and privacy regulation support.",
+    "icon": "STRIGHT.svg",
+    "pricing": [
+      "mid",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn01\\.stright\\.bizris\\.com/js/(?:[\\d.]+/)?cookie_consent_(?:block|setting)\\.js",
+    "website": "https://www.iij.ad.jp/biz/stright/"
   },
   "STUDIO": {
     "cats": [
@@ -1006,6 +1021,21 @@
     "saas": true,
     "scriptSrc": "/demandware\\.static/",
     "website": "https://demandware.com"
+  },
+  "Salesforce Data 360": {
+    "cats": [
+      97
+    ],
+    "description": "Salesforce Data 360 is a customer data platform for unifying customer data and activating audience and analytics workflows.",
+    "icon": "Salesforce.svg",
+    "implies": "Salesforce",
+    "pricing": [
+      "poa",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn\\.c360a\\.salesforce\\.com/beacon/c360a/[\\w-]+/scripts/c360a\\.min\\.js",
+    "website": "https://www.salesforce.com/data/"
   },
   "Salesforce Experience Cloud": {
     "cats": [
@@ -2358,6 +2388,24 @@
     "saas": true,
     "website": "https://sekolahku.web.id"
   },
+  "Seldit": {
+    "cats": [
+      1
+    ],
+    "description": "Seldit is a CMS platform for building and managing websites and ecommerce stores.",
+    "js": {
+      "Seldit.cms": "^true$"
+    },
+    "meta": {
+      "generator": "^Seldit$"
+    },
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "website": "https://seldit.com/"
+  },
   "Select2": {
     "cats": [
       59
@@ -2463,6 +2511,21 @@
     ],
     "saas": true,
     "website": "https://www.sellacious.com"
+  },
+  "Sellauth": {
+    "cats": [
+      6
+    ],
+    "description": "Sellauth is an ecommerce platform for creating storefronts and selling digital products, subscriptions, and services.",
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "a\\.sellauth\\.com/script\\.js",
+    "url": "\\.mysellauth\\.com",
+    "website": "https://www.sellauth.com",
+    "xhr": "api-internal-\\d+\\.sellauth\\.com"
   },
   "Sellbrite": {
     "cats": [
@@ -2925,6 +2988,24 @@
     "saas": true,
     "scriptSrc": "\\.sensaimetrics\\.io/",
     "website": "https://sensaimetrics.io"
+  },
+  "Sensei LMS": {
+    "cats": [
+      21,
+      87
+    ],
+    "description": "Sensei LMS is a WordPress plugin for creating and selling online courses, lessons, quizzes, and learning content.",
+    "dom": ".wp-block-sensei-lms-ui, .sensei-lms-course-navigation, .sensei-course-theme, link[href*='/wp-content/plugins/sensei-lms/'], link[href*='/wp-content/plugins/woothemes-sensei/plugins/sensei-lms/'], script[src*='/wp-content/plugins/sensei-lms/'], script[src*='/wp-content/plugins/woothemes-sensei/plugins/sensei-lms/']",
+    "icon": "Sensei LMS.png",
+    "oss": true,
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "requires": "WordPress",
+    "scriptSrc": "/wp-content/plugins/(?:woothemes-sensei/plugins/)?sensei-lms/",
+    "website": "https://senseilms.com/"
   },
   "Sensor Tower": {
     "cats": [
@@ -4203,6 +4284,7 @@
       "low"
     ],
     "saas": true,
+    "scriptSrc": "/application/assets/storefront/shoper",
     "website": "https://www.shoper.pl"
   },
   "Shopfa": {
@@ -4302,7 +4384,11 @@
       "sdks\\.shopifycdn\\.com",
       "cdn\\.shopify\\.com"
     ],
-    "scripts": "shopifyTag|cdn\\.shopify\\.com",
+    "scripts": [
+      "shopify\\.content_for_header\\;confidence:50",
+      "cdn\\.shopify\\.com\\;confidence:50",
+      "shopifyTag\\;confidence:50"
+    ],
     "url": "^https?//.+\\.myshopify\\.com",
     "website": "https://shopify.com",
     "xhr": "\\.myshopify\\.com"
@@ -6823,6 +6909,28 @@
     "scriptSrc": "slate-technolutions-net\\.cdn\\.technolutions\\.net/",
     "website": "https://technolutions.com"
   },
+  "Sleak.chat": {
+    "cats": [
+      52
+    ],
+    "cookies": {
+      "sleakChatId_.*": "",
+      "sleakVisitorId_.*": ""
+    },
+    "description": "Sleak.chat is a live chat platform for adding automated support widgets to websites.",
+    "icon": "Sleak.chat.svg",
+    "js": {
+      "injectSleakWidget": "",
+      "sleakScriptInjected": ""
+    },
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn\\.sleak\\.chat/fetchsleakbot\\.js",
+    "website": "https://sleak.chat"
+  },
   "Sleeknote": {
     "cats": [
       32
@@ -7126,6 +7234,18 @@
     "scriptSrc": "sdk\\.smartdx\\.co/",
     "website": "https://smartdx.co"
   },
+  "SmartEditor2": {
+    "cats": [
+      24
+    ],
+    "description": "SmartEditor2 is an open-source JavaScript WYSIWYG HTML editor from NAVER.",
+    "js": {
+      "nhn.husky.EZCreator": ""
+    },
+    "oss": true,
+    "scriptSrc": "/(?:smarteditor2|se2)/.*HuskyEZCreator\\.js",
+    "website": "https://github.com/naver/smarteditor2"
+  },
   "SmartEmailing": {
     "cats": [
       75
@@ -7320,6 +7440,20 @@
     "scriptSrc": "\\.smartsuppchat\\.com",
     "website": "https://www.smartsupp.com"
   },
+  "Smartypilot": {
+    "cats": [
+      29
+    ],
+    "description": "Smartypilot is an ecommerce AI suite that provides semantic search, chatbot assistance, and product question answering.",
+    "icon": "Smartypilot.png",
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "hub\\.smartypilot\\.ai/smartypilot-(chatbot-)?lib/",
+    "website": "https://smartypilot.ai"
+  },
   "Smash Balloon Instagram Feed": {
     "cats": [
       87
@@ -7359,6 +7493,7 @@
       100
     ],
     "description": "Smile App offers a loyalty program for Shopify stores.",
+    "dom": "script[src*='/assets/smile-loader.js']",
     "icon": "Smile.svg",
     "implies": "Smile",
     "pricing": [
@@ -7368,7 +7503,10 @@
     ],
     "requires": "Shopify",
     "saas": true,
-    "scriptSrc": "js\\.smile\\.io/.+smile-shopify\\.js",
+    "scriptSrc": [
+      "js\\.smile\\.io/.+smile-shopify\\.js",
+      "cdn\\.shopify\\.com/extensions/.+/assets/smile-loader\\.js"
+    ],
     "website": "https://apps.shopify.com/smile-io"
   },
   "Smile Virtual": {
@@ -10207,7 +10345,7 @@
     "cpe": "cpe:2.3:a:statamic:statamic:*:*:*:*:*:laravel:*:*",
     "description": "Statamic is an open-source and self-hosted content management system based on the PHP programming language.",
     "headers": {
-      "x-powered-by": "^Statamic$"
+      "x-powered-by": "(?:^|\\r?\\n)Statamic$"
     },
     "icon": "Statamic.svg",
     "implies": [
@@ -10515,7 +10653,10 @@
       "Stimulus.Application": "",
       "stimulus_application": ""
     },
-    "scripts": "/stimulus-bundle/controllers\\.js",
+    "scripts": [
+      "/stimulus-bundle/controllers\\.js",
+      "@hotwired/stimulus(?:-loading)?"
+    ],
     "website": "https://stimulusjs.org/"
   },
   "StimulusReflex": {
@@ -10864,7 +11005,7 @@
       1
     ],
     "description": "Storyblok is a headless CMS with a visual editor for developers, marketers and content editors.",
-    "dom": "img[src*='//a.storyblok.com/'], img[srcset*='a.storyblok.com']",
+    "dom": "img[src*='.storyblok.com/f/'], img[srcset*='.storyblok.com/f/']",
     "headers": {
       "content-security-policy": "app\\.storyblok\\.com",
       "x-frame-options": "app\\.storyblok\\.com"
@@ -10879,6 +11020,7 @@
       "mid"
     ],
     "saas": true,
+    "scripts": "StoryblokBridge|api(?:-[a-z]+)?\\.storyblok\\.com",
     "website": "https://www.storyblok.com"
   },
   "Storybook": {
@@ -11630,7 +11772,10 @@
       47
     ],
     "description": "Supabase is an open-source platform that offers a Postgres database, Authentication, APIs, Edge Functions, Realtime subscriptions, Storage, and Vector embeddings for project development.",
-    "dom": "a[href*='supabase.com'] > img[src*='/supabase-logo-wordmark--dark.png']",
+    "dom": [
+      "a[href*='supabase.com'] > img[src*='/supabase-logo-wordmark--dark.png']",
+      "link[href*='vendor-supabase-']"
+    ],
     "icon": "Supabase.svg",
     "implies": "PostgreSQL",
     "js": {
@@ -11646,7 +11791,10 @@
       "recurring"
     ],
     "saas": true,
-    "scripts": "\\.supabase\\.co/",
+    "scripts": [
+      "\\.supabase\\.co/",
+      "X-Client-Info\":\"(?:supabase-js|storage-js)/"
+    ],
     "website": "https://supabase.com"
   },
   "Supademo": {
@@ -11890,6 +12038,31 @@
     "saas": true,
     "scriptSrc": "chat\\.supportbox\\.cz/",
     "website": "https://supportbox.cz"
+  },
+  "Supportly": {
+    "cats": [
+      52
+    ],
+    "description": "Supportly is an AI-powered live chat and customer support widget for websites.",
+    "icon": "Supportly.svg",
+    "js": {
+      "SupportlyAI.product": "^Supportly AI$",
+      "SupportlyAI.widget": "^live-chat$"
+    },
+    "meta": {
+      "generator": "^Supportly AI$",
+      "supportly-ai": "^enabled$",
+      "supportly-widget": "^live-chat$"
+    },
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring",
+      "poa"
+    ],
+    "saas": true,
+    "scriptSrc": "supportly-chat-widget\\.js",
+    "website": "https://supportly.com.tr"
   },
   "Supsystic": {
     "cats": [
@@ -12199,6 +12372,36 @@
       "limonte-sweetalert2/([\\d.]+)/sweetalert2(?:\\.all)(?:\\.min)\\.js"
     ],
     "website": "https://sweetalert2.github.io/"
+  },
+  "SweetCode Pixel Manager for WooCommerce": {
+    "cats": [
+      87
+    ],
+    "description": "SweetCode Pixel Manager for WooCommerce is a WordPress plugin for tracking ecommerce conversions across Google Ads, GA4, Meta, TikTok, Pinterest, and Microsoft Ads.",
+    "icon": "SweetCode Pixel Manager for WooCommerce.png",
+    "implies": "WooCommerce",
+    "js": {
+      "pmwDataLayer.version.number": "^(.+)$\\;version:\\1",
+      "wpmDataLayer.version.number": "^(.+)$\\;version:\\1"
+    },
+    "meta": {
+      "pm-datalayer-meta": ""
+    },
+    "pricing": [
+      "freemium",
+      "low",
+      "recurring"
+    ],
+    "scriptSrc": [
+      "/wp-content/plugins/woocommerce-google-adwords-conversion-tracking-tag/js/public/(?:free/)?pmw-public\\.p1\\.min\\.js(?:\\?ver=([\\d.]+))?\\;version:\\1",
+      "/wp-content/plugins/woocommerce-google-adwords-conversion-tracking-tag/js/public/(?:free/)?[a-z-]+\\.[a-f0-9]+\\.chunk\\.min\\.js",
+      "/wp-content/plugins/woocommerce-google-adwords-conversion-tracking-tag/js/public/wooptpm\\.js(?:\\?ver=([\\d.]+))?\\;version:\\1"
+    ],
+    "scripts": [
+      "window\\.pmwDataLayer[\\s\\S]*woocommerce-google-adwords-conversion-tracking-tag",
+      "window\\.wpmDataLayer[\\s\\S]*woocommerce-google-adwords-conversion-tracking-tag"
+    ],
+    "website": "https://sweetcode.com/plugins/pmw/"
   },
   "SweetHelp": {
     "cats": [
@@ -12620,7 +12823,7 @@
       "systeme_affiliate": ""
     },
     "description": "Systeme.io is a marketing platform that helps businesses create and launch sales funnels, affiliate programs, email marketing campaigns, online courses, blogs, and websites.",
-    "dom": "from[action*='//systeme.io/'], a[href*='//systeme.io/']",
+    "dom": "form[action*='//systeme.io/']",
     "icon": "Systeme.io.svg",
     "pricing": [
       "freemium",
@@ -12628,8 +12831,11 @@
       "recurring"
     ],
     "saas": true,
-    "scriptSrc": "//systeme\\.io/",
-    "scripts": "\\.systeme\\.io",
+    "scriptSrc": [
+      "d3fit27i5nzkqh\\.cloudfront\\.net/default/(?:runtime|page|vendors)\\.",
+      "//systeme\\.io/"
+    ],
+    "url": "^https?://(?:[^/]+\\.)?systeme\\.io/",
     "website": "https://systeme.io"
   },
   "Systems Accel": {

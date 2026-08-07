@@ -217,6 +217,29 @@
     "requires": "Microsoft ASP.NET",
     "website": "https://www.icisleri.gov.tr/internet-sayfalari-yonetimi-isay"
   },
+  "ISO100": {
+    "cats": [
+      7
+    ],
+    "description": "ISO100 is a platform for publishing image-led photography portfolios.",
+    "headers": {
+      "content-security-policy": "api\\.iso100\\.app"
+    },
+    "icon": "ISO100.svg",
+    "meta": {
+      "generator": "^ISO100 \\(https://iso100\\.app\\)$"
+    },
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "saas": true,
+    "scripts": "api\\.iso100\\.app/v1/public/portfolios/[^/]+/(?:events|%65vents)",
+    "url": "\\.iso100\\.photos(?:/|$)",
+    "website": "https://iso100.app",
+    "xhr": "api\\.iso100\\.app"
+  },
   "Iamport": {
     "cats": [
       41
@@ -1130,6 +1153,7 @@
     ],
     "description": "Influx CMS is a medical marketing platform specializing in custom web design and marketing for doctors, surgeons, and medical spas.",
     "dom": "a[href*='www.influxmarketing.com'] > svg[class*='influx-footer-logo'",
+    "excludes": "Growthstack",
     "icon": "InfluxCMS.svg",
     "meta": {
       "generator": "^Influx CMS$"
@@ -1282,6 +1306,29 @@
     "saas": true,
     "scriptSrc": "cdn\\.inksoft\\.com/",
     "website": "https://www.inksoft.com"
+  },
+  "Inkybay": {
+    "cats": [
+      100,
+      76
+    ],
+    "description": "Inkybay is a Shopify product personalization app for configurable product options, live previews, and print-ready custom orders.",
+    "icon": "Inkybay.svg",
+    "implies": "Shopify",
+    "js": {
+      "EFOLI_INKYBAY_SCRIPTTAG_JS_INIT": "",
+      "runInkybayApp": ""
+    },
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": [
+      "\\.inkybay\\.com/shopify/js/inkybay\\.js",
+      "/inkybay-product-personalizer-\\d+/assets/app\\.js"
+    ],
+    "website": "https://inkybay.com"
   },
   "Innervate": {
     "cats": [
@@ -1899,6 +1946,9 @@
     ],
     "description": "Intershop is an ecommerce platform, tailored to the needs of complex business processes and major organizations.",
     "icon": "Intershop.svg",
+    "meta": {
+      "intershop": "^Powered by INTERSHOP(?: \\d+)?$"
+    },
     "pricing": [
       "onetime",
       "high"
@@ -1990,6 +2040,20 @@
     "saas": true,
     "scriptSrc": "tools\\.inticeinc\\.com",
     "website": "https://intice.com"
+  },
+  "Intlayer": {
+    "cats": [
+      59
+    ],
+    "description": "Intlayer is an internationalization framework and content management platform for JavaScript applications.",
+    "icon": "Intlayer.svg",
+    "js": {
+      "intlayer.enabled": ""
+    },
+    "oss": true,
+    "saas": true,
+    "scriptSrc": "IntlayerProvider-[\\w-]+\\.js",
+    "website": "https://intlayer.org"
   },
   "Invenio": {
     "cats": [

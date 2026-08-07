@@ -169,10 +169,10 @@
     "icon": "CKEditor.svg",
     "js": {
       "CKEDITOR": "",
-      "CKEDITOR.version": "^([\\d\\.])$\\;version:\\1",
+      "CKEDITOR.version": "^([\\d.]+)$\\;version:\\1",
       "CKEDITOR_BASEPATH": "",
-      "CKEDITOR_VERSION": "^([\\d\\.])$\\;version:5-\\1",
-      "apex.libVersions.ckeditor5": "^([\\d\\.])$\\;version:5-\\1"
+      "CKEDITOR_VERSION": "^([\\d.]+)$\\;version:5-\\1",
+      "apex.libVersions.ckeditor5": "^([\\d.]+)$\\;version:5-\\1"
     },
     "website": "https://ckeditor.com"
   },
@@ -1741,6 +1741,28 @@
     ],
     "saas": true,
     "website": "https://casasoft.ch"
+  },
+  "Casablanca": {
+    "cats": [
+      72
+    ],
+    "description": "Casablanca is a hotel booking and property management platform for accommodation businesses.",
+    "dom": {
+      "a[href*='://ibe.casablanca.at/']": {
+        "attributes": {
+          "href": "^https?://ibe\\.casablanca\\.at/(?:[a-z]{2}/)?(?:IBE/)?a_\\d+_[a-z0-9]+(?:[/?#]|$)"
+        }
+      },
+      "iframe[src*='://ibe.casablanca.at/']": {
+        "attributes": {
+          "src": "^https?://ibe\\.casablanca\\.at/(?:[a-z]{2}/)?(?:IBE/)?a_\\d+_[a-z0-9]+(?:[/?#]|$)"
+        }
+      }
+    },
+    "icon": "default.svg",
+    "saas": true,
+    "scriptSrc": "frontend\\.casablanca\\.at/",
+    "website": "https://casablanca.at"
   },
   "Casafari": {
     "cats": [
@@ -4389,6 +4411,18 @@
     ],
     "website": "https://clientjs.org"
   },
+  "ClientXCMS": {
+    "cats": [
+      1
+    ],
+    "description": "ClientXCMS is an open-source client portal and hosting management platform built for web-hosting providers.",
+    "dom": "header#bhNavbar.bh-navbar #dark-mode-btn[data-url$='/darkmode']",
+    "icon": "ClientXCMS.png",
+    "oss": true,
+    "saas": true,
+    "scripts": "bh-navbar__burger|\\[data-bh-reveal\\]",
+    "website": "https://clientxcms.com"
+  },
   "Clientacquisition": {
     "cats": [
       63
@@ -5557,6 +5591,7 @@
       6
     ],
     "description": "Comarch e-Sklep is an ecommerce platform for creating and managing an online store.",
+    "dom": "a[href*='comarchesklep.pl'][title*='Powered by Comarch e-Sklep']",
     "icon": "ComarcheSklep.svg",
     "pricing": [
       "low",
@@ -5808,6 +5843,7 @@
       6
     ],
     "description": "Commerce7 is an ecommerce platform for wineries.",
+    "dom": "script#c7-javascript[src*='cdn.commerce7.com'], link#commerce7-styles-css[href*='cdn.commerce7.com'], #commerce7-cart-container",
     "icon": "Commerce7.svg",
     "pricing": [
       "mid",
@@ -7794,7 +7830,7 @@
       "recurring"
     ],
     "saas": true,
-    "scriptSrc": "\\.covet\\.pics/",
+    "scriptSrc": "(?:\\.covet\\.pics/|@covet-pics/covet-pics-widget)",
     "website": "https://covet.pics"
   },
   "Cowboy": {
@@ -8533,6 +8569,28 @@
     "icon": "Curaytor.svg",
     "saas": true,
     "website": "https://www.curaytor.com"
+  },
+  "CusRev": {
+    "cats": [
+      90
+    ],
+    "description": "CusRev is a WooCommerce review platform and WordPress plugin for collecting, verifying, and displaying customer reviews.",
+    "dom": [
+      "link[href*='/wp-content/plugins/customer-reviews-woocommerce/']",
+      "a[href*='cusrev.com/'][href*='/reviews/']"
+    ],
+    "icon": "CusRev.png",
+    "implies": "WooCommerce",
+    "oss": true,
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "requires": "WordPress",
+    "saas": true,
+    "scriptSrc": "/wp-content/plugins/customer-reviews-woocommerce/.+\\.js(?:\\?ver=(\\d+(?:\\.\\d+)+))?\\;version:\\1",
+    "website": "https://www.cusrev.com"
   },
   "Custobar": {
     "cats": [

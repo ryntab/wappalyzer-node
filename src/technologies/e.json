@@ -996,6 +996,7 @@
       "EditorJS": ""
     },
     "oss": true,
+    "scripts": "editorJs:\\{messages:\\{ui:\\{blockTunes",
     "website": "https://editorjs.io"
   },
   "Edlio": {
@@ -1621,6 +1622,7 @@
     "description": "Elm is a statically typed functional programming language created by Evan Czaplicki in 2012 for building web applications.",
     "icon": "elm.svg",
     "js": {
+      "Elm": "",
       "Elm.Main.embed": "\\;version:0.18",
       "Elm.Main.init": "\\;version:0.19"
     },
@@ -1863,12 +1865,14 @@
     "cats": [
       17
     ],
+    "css": "font\\.emtech\\.cc/css/[A-Za-z0-9_-]+",
     "description": "Emfont is an open-source CJK webfont service that enables self-hosted, cache-efficient, and privacy-conscious distribution of open-source fonts.",
     "icon": "Emfont.svg",
     "js": {
       "emfont.Emfont": ""
     },
     "saas": true,
+    "scriptSrc": "font\\.emtech\\.cc/emfont\\.js",
     "website": "https://font.emtech.cc"
   },
   "Emojicom": {

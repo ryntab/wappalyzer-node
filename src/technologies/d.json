@@ -163,6 +163,17 @@
     "implies": "Java",
     "website": "https://www.atex.com/products/dm-polopoly"
   },
+  "DMVCFramework": {
+    "cats": [
+      18
+    ],
+    "description": "DMVCFramework is an open-source Delphi framework for building web APIs and web applications.",
+    "headers": {
+      "X-Powered-By": "^DMVCFramework\\s*([\\w.-]+)?\\;version:\\1"
+    },
+    "oss": true,
+    "website": "https://github.com/danieleteti/delphimvcframework"
+  },
   "DNN": {
     "cats": [
       1
@@ -2080,6 +2091,21 @@
     "scriptSrc": "\\.dimml\\.io/",
     "website": "https://www.dimml.io"
   },
+  "Dioxus": {
+    "cats": [
+      66
+    ],
+    "description": "Dioxus is a Rust framework for building fullstack web, desktop, and mobile apps.",
+    "icon": "Dioxus.png",
+    "implies": "Rust",
+    "js": {
+      "dx_hydrate": "",
+      "initial_dioxus_hydration_data": ""
+    },
+    "oss": true,
+    "scripts": "window\\.(?:initial_dioxus_hydration_data|dx_hydrate)",
+    "website": "https://dioxuslabs.com"
+  },
   "DirectAdmin": {
     "cats": [
       9
@@ -2295,6 +2321,9 @@
     "cpe": "cpe:2.3:a:elegantthemes:divi:*:*:*:*:*:wordpress:*:*",
     "description": "Divi is a WordPress Theme and standalone WordPress plugin from Elegant themes that allows users to build websites using the visual drag-and-drop Divi page builder.",
     "dom": {
+      "body.et_divi_theme, body.wp-theme-Divi, link#divi-style-parent-css[href*='/wp-content/themes/Divi/']": {
+        "exists": ""
+      },
       "style#divi-style-parent-inline-inline-css": {
         "text": "Version\\:\\s([\\d\\.]+)\\;version:\\1"
       }
@@ -2315,7 +2344,10 @@
     ],
     "requires": "WordPress",
     "saas": true,
-    "scriptSrc": "Divi/js/custom\\.(?:min|unified)\\.js\\?ver=([\\d.]+)\\;version:\\1",
+    "scriptSrc": [
+      "Divi/js/custom\\.(?:min|unified)\\.js\\?ver=([\\d.]+)\\;version:\\1",
+      "wp-content/themes/Divi/js/(?:scripts\\.min|smoothscroll)\\.js\\?ver=([\\d.]+)\\;version:\\1"
+    ],
     "website": "https://www.elegantthemes.com/gallery/divi"
   },
   "Divide": {
@@ -2421,6 +2453,19 @@
     },
     "oss": true,
     "website": "https://github.com/dotnet/docfx"
+  },
+  "Docebo": {
+    "cats": [
+      21
+    ],
+    "description": "Docebo is a learning management system for delivering, managing, and tracking online training programs.",
+    "pricing": [
+      "poa",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn\\d?\\.dcbstatic\\.com/(?:public/static-content/init|(?:main|scripts|polyfills)\\.)",
+    "website": "https://www.docebo.com"
   },
   "Docker": {
     "cats": [
@@ -3819,6 +3864,17 @@
     "saas": true,
     "scriptSrc": "download\\.digiaccess\\.org",
     "website": "https://www.digiaccess.org"
+  },
+  "docmd": {
+    "cats": [
+      4
+    ],
+    "description": "docmd is an open-source documentation generator for building static documentation websites.",
+    "meta": {
+      "generator": "^docmd\\sv([\\d.x]+)$\\;version:\\1"
+    },
+    "oss": true,
+    "website": "https://docmd.io"
   },
   "doxo": {
     "cats": [

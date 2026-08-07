@@ -161,6 +161,20 @@
     "scriptSrc": "api\\.uxsniff\\.com",
     "website": "https://uxsniff.com"
   },
+  "Uappi": {
+    "cats": [
+      6
+    ],
+    "description": "Uappi is an ecommerce platform for B2C, B2B, and marketplace operations.",
+    "dom": "a[href*='uappi.com.br/'][href*='utm_content=footersite']",
+    "icon": "Uappi.svg",
+    "pricing": [
+      "poa"
+    ],
+    "saas": true,
+    "scriptSrc": "/sdk/uappi/loader\\.js",
+    "website": "https://uappi.com.br/"
+  },
   "Ubercart": {
     "cats": [
       6
@@ -398,7 +412,10 @@
       "umami": ""
     },
     "oss": true,
-    "scriptSrc": "umami\\.js",
+    "scriptSrc": [
+      "(?:^|[./])umami\\.[^/]+/(?:script|u)\\.js",
+      "umami\\.js"
+    ],
     "website": "https://umami.is/"
   },
   "Umbraco": {
@@ -660,6 +677,18 @@
     ],
     "saas": true,
     "website": "https://www.uniform.dev"
+  },
+  "UnifyDesk": {
+    "cats": [
+      1
+    ],
+    "description": "UnifyDesk is a content management system for building and managing websites and mobile apps from a single dashboard.",
+    "icon": "UnifyDesk.svg",
+    "meta": {
+      "generator": "^UnifyDesk CMS$"
+    },
+    "saas": true,
+    "website": "https://bookmi.ca"
   },
   "Unilog": {
     "cats": [
@@ -1304,6 +1333,25 @@
     ],
     "saas": true,
     "website": "https://uscreen.tv/"
+  },
+  "UseClick": {
+    "cats": [
+      10
+    ],
+    "description": "UseClick is a privacy-focused analytics and link management platform for tracking website traffic, short links, and bio pages.",
+    "icon": "UseClick.svg",
+    "js": {
+      "useclick.version": "(.+)\\;version:\\1"
+    },
+    "pricing": [
+      "low",
+      "recurring",
+      "freemium"
+    ],
+    "saas": true,
+    "scriptSrc": "useclick\\.io/analytics\\.js",
+    "website": "https://useclick.io",
+    "xhr": "useclick\\.io/api/analytics/collect"
   },
   "UseResponse": {
     "cats": [

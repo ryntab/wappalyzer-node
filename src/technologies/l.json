@@ -76,6 +76,18 @@
     "website": "https://wiki.lkqd.com",
     "xhr": "\\.lkqd\\.net"
   },
+  "LLK Analytics": {
+    "cats": [
+      10
+    ],
+    "description": "LLK Analytics is a privacy-friendly analytics platform for websites, apps, and digital publications with realtime traffic statistics and AI-generated reports.",
+    "dom": "script[src*='js.llk.hk'][data-site-id]",
+    "icon": "LLK Analytics.svg",
+    "saas": true,
+    "scriptSrc": "js\\.llk\\.hk",
+    "website": "https://llk.hk/",
+    "xhr": "api\\.llk\\.hk"
+  },
   "LPQV": {
     "cats": [
       6
@@ -242,6 +254,7 @@
       18
     ],
     "cookies": {
+      "laravel-session": "",
       "laravel_session": ""
     },
     "cpe": "cpe:2.3:a:laravel:laravel:*:*:*:*:*:*:*:*",
@@ -351,6 +364,19 @@
     ],
     "saas": true,
     "website": "https://launchlms.com.br"
+  },
+  "LaunchMyStore": {
+    "cats": [
+      6
+    ],
+    "description": "LaunchMyStore is an ecommerce platform for creating and managing online stores, including themes, payments, inventory, and storefront tools.",
+    "headers": {
+      "link": "(?:assets|cdn)\\.launchmystore\\.io"
+    },
+    "icon": "LaunchMyStore.png",
+    "saas": true,
+    "scriptSrc": "assets\\.launchmystore\\.io/themes/[\\w-]+/assets/",
+    "website": "https://launchmystore.io"
   },
   "LaunchNotes": {
     "cats": [
@@ -918,6 +944,7 @@
       35
     ],
     "description": "Leaflet is the open-source JavaScript library for mobile-friendly interactive maps.",
+    "dom": "link[href*='leaflet.css'], link[href*='leaflet.js'], script[src*='leaflet.js']",
     "icon": "Leaflet.svg",
     "js": {
       "L.DistanceGrid": "",

@@ -291,6 +291,7 @@
     "description": "Yandex. Metrica is a free web analytics service that tracks and reports website traffic.",
     "icon": "Yandex.Metrika.svg",
     "js": {
+      "mainMetrikaId": "",
       "yandex_metrika": ""
     },
     "scriptSrc": [

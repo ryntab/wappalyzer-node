@@ -259,6 +259,26 @@
     "requires": "WordPress",
     "website": "https://amp-wp.org"
   },
+  "ANDCommerce": {
+    "cats": [
+      6
+    ],
+    "description": "ANDCommerce is an ecommerce platform for building and operating online stores.",
+    "icon": "ANDCommerce.svg",
+    "meta": {
+      "generator": "^ANDCommerce$"
+    },
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": [
+      "/extension_andcommerce/",
+      "/andcommerce(?:scriptcontent|scriptlayout)_"
+    ],
+    "website": "https://www.andcommerce.com.br/"
+  },
   "ANS": {
     "cats": [
       88,
@@ -2470,6 +2490,23 @@
     "scriptSrc": "\\.advin\\.cz/",
     "website": "https://www.advin.cz"
   },
+  "Adwos CMS": {
+    "cats": [
+      1
+    ],
+    "description": "Adwos CMS is a content management system for classified ads, marketplaces, and rental services.",
+    "icon": "Adwos CMS.svg",
+    "meta": {
+      "adwos:powered-by": "^Adwos CMS$",
+      "application-name": "^Adwos CMS$",
+      "generator": "^Adwos CMS$"
+    },
+    "pricing": [
+      "low",
+      "onetime"
+    ],
+    "website": "https://adwos.org"
+  },
   "Adyen": {
     "cats": [
       41
@@ -2882,7 +2919,6 @@
       "ahrefs-site-verification": ""
     },
     "pricing": [
-      "low",
       "mid"
     ],
     "website": "https://ahrefs.com"
@@ -5000,7 +5036,7 @@
       66
     ],
     "description": "Ant Design is an UI library that can be used with data flow solutions and application frameworks in any React ecosystem.",
-    "dom": "div[class*='ant-collapse'], link[href*='antd'], div[class*='ant-spin-container']",
+    "dom": "div[class*='ant-collapse'], link[href*='antd'], div[class*='ant-spin-container'], form.ant-form .ant-form-item .ant-input",
     "icon": "Ant Design.svg",
     "js": {
       "__ANTD_STYLE_CACHE_MANAGER_FOR_SSR__": "",
@@ -5128,6 +5164,7 @@
       "techaro.lol-anubis-cookie-verification": ""
     },
     "description": "Anubis is a system that evaluates the characteristics of incoming HTTP requests to determine their legitimacy and enhance website protection.",
+    "dom": "script#anubis_version[type='application/json'], script#anubis_challenge[type='application/json']",
     "icon": "Anubis.svg",
     "oss": true,
     "website": "https://anubis.techaro.lol"
@@ -5148,6 +5185,20 @@
     "saas": true,
     "scriptSrc": "script\\.anura\\.io/",
     "website": "https://www.anura.io"
+  },
+  "Anviara EU Widerrufsbutton": {
+    "cats": [
+      100
+    ],
+    "description": "Anviara EU Widerrufsbutton is a Shopify app that adds a compliant EU withdrawal button and form to online stores.",
+    "dom": ".anv-withdrawal-form, .anv-withdrawal-button",
+    "requires": "Shopify",
+    "saas": true,
+    "scriptSrc": [
+      "customerorderediting\\.com/assets/altcha-[\\da-f]+\\.js",
+      "cdn\\.shopify\\.com/extensions/.+/self-serve-order-edit-.+/assets/withdrawal-link-locale\\.js"
+    ],
+    "website": "https://anviara.com"
   },
   "AnyChat": {
     "cats": [
@@ -6701,7 +6752,7 @@
     "cats": [
       52
     ],
-    "description": "AskSpot is an AI chatbot platform tailored for marketing, digital, and web development agencies.",
+    "description": "AskSpot is an AI customer support platform for ecommerce websites.",
     "icon": "AskSpot.svg",
     "js": {
       "askspot.Chatbot": ""
@@ -6711,8 +6762,9 @@
       "recurring"
     ],
     "saas": true,
-    "scripts": "app\\.askspot\\.ai",
-    "website": "https://askspot.ai"
+    "scriptSrc": "chat\\.askspot\\.io/api/v1/integration/",
+    "scripts": "chat\\.askspot\\.io/api/v1/chat-widget/",
+    "website": "https://askspot.io"
   },
   "Askas": {
     "cats": [
@@ -6934,6 +6986,7 @@
       "generator": "^Astro(?:\\sv([\\d\\.]+))?$\\;version:\\1"
     },
     "oss": true,
+    "scriptSrc": "/_astro/.+\\.js",
     "website": "https://astro.build"
   },
   "Astute Solutions": {

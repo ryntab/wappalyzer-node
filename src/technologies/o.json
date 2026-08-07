@@ -91,6 +91,17 @@
     },
     "website": "https://www.oxid-esales.com"
   },
+  "Oat UI": {
+    "cats": [
+      66
+    ],
+    "description": "Oat UI is a lightweight, semantic HTML, CSS, and JavaScript UI component library.",
+    "dom": "ot-accordion, ot-dropdown, ot-tabs, ot-toast",
+    "icon": "Oat UI.svg",
+    "oss": true,
+    "scriptSrc": "(?:^|/)oat(?:\\.min)?\\.js(?:\\?|$)\\;confidence:50",
+    "website": "https://oat.ink"
+  },
   "Oat++": {
     "cats": [
       18
@@ -2294,6 +2305,19 @@
     "scriptSrc": "c\\.oracleinfinity\\.io",
     "website": "https://www.oracle.com/cx/marketing/digital-intelligence/"
   },
+  "Oracle Linux": {
+    "cats": [
+      28
+    ],
+    "cpe": "cpe:2.3:o:oracle:linux:*:*:*:*:*:*:*:*",
+    "description": "Oracle Linux is an enterprise Linux distribution by Oracle, designed for cloud and on-premises workloads.",
+    "headers": {
+      "server": "\\(Oracle Linux(?: Server)?\\)"
+    },
+    "icon": "Oracle.svg",
+    "oss": true,
+    "website": "https://www.oracle.com/linux/"
+  },
   "Oracle Maxymiser": {
     "cats": [
       74,
@@ -2375,7 +2399,7 @@
   },
   "Orange CDB": {
     "cats": [
-      32
+      31
     ],
     "description": "Orange CDB is a content delivery network (CDN) and edge computing solution that accelerates content distribution, improves traffic handling, and enhances performance by delivering web resources through geographically distributed servers.",
     "headers": {

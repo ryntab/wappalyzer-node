@@ -274,6 +274,17 @@
     "saas": true,
     "website": "https://www.faire.com"
   },
+  "Falakcart": {
+    "cats": [
+      6
+    ],
+    "description": "Falakcart is an ecommerce platform for creating and managing online stores with integrated storefront and checkout tooling.",
+    "headers": {
+      "set-cookie": "falakcart-session="
+    },
+    "saas": true,
+    "website": "https://falakcart.com"
+  },
   "FalguniThemes Nisarg": {
     "cats": [
       80
@@ -1459,7 +1470,8 @@
     ],
     "scripts": [
       "\\.gstatic\\.com/firebasejs/([\\d\\.]+)/\\;version:\\1",
-      "firebase(?:Config|io\\.com)"
+      "firebase(?:Config|io\\.com)",
+      "__FIREBASE_DEFAULTS__|FirebaseError"
     ],
     "website": "https://firebase.google.com",
     "xhr": "fire(?:base|store)\\.googleapis\\.com|\\.firebaseio\\.com"
@@ -3190,6 +3202,24 @@
     "scripts": "format\\.com",
     "website": "https://www.format.com"
   },
+  "Formbricks": {
+    "cats": [
+      73
+    ],
+    "description": "Formbricks is an open-source survey and experience management platform for collecting website, app, email, and link-based feedback.",
+    "js": {
+      "formbricks": ""
+    },
+    "oss": true,
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "/js/formbricks\\.umd\\.cjs",
+    "website": "https://formbricks.com"
+  },
   "Formcake": {
     "cats": [
       110
@@ -3439,6 +3469,26 @@
     "saas": true,
     "scriptSrc": "pixel\\.forsant\\.io",
     "website": "https://forsant.io"
+  },
+  "Forsid": {
+    "cats": [
+      6
+    ],
+    "description": "Forsid is an ecommerce platform for creating and managing online stores.",
+    "headers": {
+      "X-Powered-By": "(?:^|,\\s*)Forsid(?:\\s*,|$)"
+    },
+    "js": {
+      "ForsidMiniCart": "",
+      "__forsid": "",
+      "forsidAnalytics": "",
+      "forsidDL": ""
+    },
+    "meta": {
+      "generator": "^Forsid$"
+    },
+    "saas": true,
+    "website": "https://forsid.com"
   },
   "Forte": {
     "cats": [
@@ -4351,6 +4401,29 @@
     "saas": true,
     "scripts": "\\.firstgiving\\.com",
     "website": "https://www.frontstream.com"
+  },
+  "Froomle": {
+    "cats": [
+      76
+    ],
+    "description": "Froomle is an AI personalization platform for product and content recommendations across websites and digital channels.",
+    "dom": "[data-froomle-config], [data-froomle-reco], [data-froomle-request-id], [data-component='froomle/recommendations']",
+    "icon": "Froomle.png",
+    "js": {
+      "FroomleFrontendSdk": "",
+      "FroomleFrontendSdkRuntime": ""
+    },
+    "pricing": [
+      "poa",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": [
+      "@froomle/frontend-sdk",
+      "(?:^|/)froomle(?:\\.global|\\.min)?(?:-[\\d.]+)?\\.js"
+    ],
+    "website": "https://www.froomle.ai",
+    "xhr": "\\.froomle\\.com/api/[^/]+/(?:events|recommendations/requests)"
   },
   "Froonze": {
     "cats": [

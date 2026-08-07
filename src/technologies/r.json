@@ -361,6 +361,21 @@
     "implies": "Ruby",
     "website": "https://github.com/rtomayko/rack-cache"
   },
+  "Rackspace": {
+    "cats": [
+      88
+    ],
+    "description": "Rackspace is a cloud computing and managed hosting provider.",
+    "dns": {
+      "NS": "\\.rackspace\\.com"
+    },
+    "icon": "Rackspace.png",
+    "pricing": [
+      "recurring",
+      "poa"
+    ],
+    "website": "https://www.rackspace.com"
+  },
   "Ractive.js": {
     "cats": [
       59
@@ -489,7 +504,8 @@
     ],
     "description": "Railway is a cloud platform that simplifies building, deploying, and managing applications with easy setup and scalable infrastructure.",
     "headers": {
-      "Server": "^railway$"
+      "Server": "^railway(?:-edge)?$",
+      "x-railway-edge": "^railway/"
     },
     "icon": "Railway.svg",
     "pricing": [
@@ -1198,7 +1214,11 @@
       "/([\\d\\.]+)/react(?:\\.min)?\\.js\\;version:\\1",
       "^react\\b.*\\.js"
     ],
-    "scripts": "react\\.js",
+    "scripts": [
+      "react\\.js",
+      "@license React\\s.{0,80}react(?:\\.production(?:\\.min)?|\\.development)?\\.js",
+      "https://react\\.dev/errors/.{0,250}Minified React error #"
+    ],
     "website": "https://reactjs.org"
   },
   "React Bricks": {
@@ -2687,6 +2707,29 @@
     "scriptSrc": "\\.rentcafe\\.com/",
     "website": "https://www.rentcafe.com"
   },
+  "Rentware": {
+    "cats": [
+      93
+    ],
+    "description": "Rentware is rental management software with booking widgets for inventory, reservation, and online payment workflows.",
+    "dom": "rtr-widget-config, rentware-checkout, rtr-search, rentware-search",
+    "icon": "Rentware.svg",
+    "js": {
+      "RENTWARE_BASE_API_URL": "",
+      "RENTWARE_LANGUAGE": ""
+    },
+    "pricing": [
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": [
+      "w-cdn\\.rentware\\.io/dist/rentware-widgets\\.esm\\.js",
+      "cdn\\.rtr-io\\.com/widgets(?:_sol_v2)?\\.js"
+    ],
+    "website": "https://rentware.com",
+    "xhr": "widget\\.rtr-io\\.com/booking/system"
+  },
   "Rep.co": {
     "cats": [
       90
@@ -2768,6 +2811,24 @@
     "saas": true,
     "scriptSrc": "cdn\\.getreplybox\\.com",
     "website": "https://getreplybox.com"
+  },
+  "ReplySuite": {
+    "cats": [
+      52
+    ],
+    "description": "ReplySuite is an AI-powered customer engagement platform for automated website chat and response management.",
+    "icon": "ReplySuite.png",
+    "js": {
+      "ReplySuite": ""
+    },
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "replysuite\\.app/embed\\.js",
+    "website": "https://replysuite.app"
   },
   "Replyco": {
     "cats": [
@@ -4223,6 +4284,17 @@
     "saas": true,
     "website": "https://rive.app"
   },
+  "Rivo": {
+    "cats": [
+      84
+    ],
+    "description": "Rivo is a Shopify loyalty and referrals platform.",
+    "icon": "Rivo.png",
+    "requires": "Shopify",
+    "saas": true,
+    "scriptSrc": "cdn\\.shopify\\.com/extensions/[^/]+/rivo-loyalty-rewards-referrals-\\d+/assets/rivo-app-embed\\.js",
+    "website": "https://www.rivo.io"
+  },
   "Rivyo": {
     "cats": [
       100
@@ -4939,6 +5011,7 @@
     "description": "Rust is a multi-paradigm, general-purpose programming language designed for performance and safety, especially safe concurrency.",
     "icon": "Rust.svg",
     "oss": true,
+    "scripts": "TrunkApplicationStarted\\;confidence:100",
     "website": "https://www.rust-lang.org"
   },
   "Ruttl": {

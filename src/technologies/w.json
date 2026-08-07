@@ -393,7 +393,10 @@
     ],
     "cpe": "cpe:2.3:a:wp-rocket:wp-rocket:*:*:*:*:*:wordpress:*:*",
     "description": "WP Rocket is a caching and performance optimization plugin to improve the loading speed of WordPress websites.",
-    "dom": "style#wpr-usedcss",
+    "dom": [
+      "link[data-rocket-prefetch]",
+      "style#wpr-usedcss"
+    ],
     "headers": {
       "X-Powered-By": "WP Rocket(?:/([\\d.]+))?\\;version:\\1",
       "X-Rocket-Nginx-Bypass": ""
@@ -416,6 +419,7 @@
     "requires": "WordPress",
     "saas": true,
     "scriptSrc": "/wp-content/plugins/wp-rocket/",
+    "scripts": "RocketBrowserCompatibilityChecker|RocketPreloadLinksConfig|rocket_lazyload_css_data",
     "website": "https://wp-rocket.me"
   },
   "WP SEO AI": {
@@ -433,6 +437,21 @@
     "requires": "WordPress",
     "saas": true,
     "website": "https://wpseoai.com"
+  },
+  "WP Stratos": {
+    "cats": [
+      62,
+      88
+    ],
+    "description": "WP Stratos is a managed WordPress hosting platform.",
+    "headers": {
+      "platform": "^WP Stratos$",
+      "x-powered-by": "^WP Stratos Managed Cloud$"
+    },
+    "icon": "WP Stratos.svg",
+    "implies": "WordPress",
+    "saas": true,
+    "website": "https://wpstratos.com"
   },
   "WP-Optimize": {
     "cats": [
@@ -1319,7 +1338,7 @@
       66
     ],
     "description": "Web Awesome is an open-source library of customizable, standards-based, and framework-agnostic UI components designed to support interoperable web interfaces.",
-    "dom": "link[href*='/dist-cdn/styles/webawesome.css']",
+    "dom": "wa-button, wa-combobox, wa-icon, wa-input, link[href*='/dist-cdn/styles/webawesome.css']",
     "icon": "WebAwesome.svg",
     "pricing": [
       "low",
@@ -2157,6 +2176,30 @@
     ],
     "saas": true,
     "website": "https://www.websitebuilder.com"
+  },
+  "Webstorio": {
+    "cats": [
+      51
+    ],
+    "description": "Webstorio is an AI-powered website builder with built-in CMS, hosting, ecommerce, forms, and database tools.",
+    "dom": "script[data-webstorio-sdk-stub], script#webstorio-sdk",
+    "icon": "Webstorio.png",
+    "implies": [
+      "Next.js"
+    ],
+    "js": {
+      "__webstorioCallQueue__": "",
+      "__webstorioQueue__": "",
+      "webstorio": ""
+    },
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring",
+      "poa"
+    ],
+    "saas": true,
+    "website": "https://webstorio.com"
   },
   "Webstudio": {
     "cats": [

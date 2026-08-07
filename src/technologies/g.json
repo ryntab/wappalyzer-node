@@ -26,6 +26,7 @@
       "low",
       "recurring"
     ],
+    "scriptSrc": "/wp-content/plugins/webtoffee-cookie-consent/(?:[^/]+/)*frontend/js/(?:script|gcm)(?:\\.min)?\\.js",
     "website": "https://www.webtoffee.com/product/gdpr-cookie-consent/"
   },
   "GEODIS": {
@@ -743,6 +744,23 @@
     "scripts": "\\.chamo-chat\\.com/",
     "website": "https://chamo-chat.com"
   },
+  "Genlook Virtual try-on": {
+    "cats": [
+      100
+    ],
+    "description": "Genlook Virtual try-on is an AI-powered virtual fitting room app for Shopify stores.",
+    "icon": "Genlook.svg",
+    "implies": "Shopify",
+    "pricing": [
+      "freemium",
+      "low",
+      "recurring",
+      "payg"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn\\.shopify\\.com/extensions/[^/]+/genlook-[^/]+/assets/",
+    "website": "https://genlook.app"
+  },
   "Gensolve": {
     "cats": [
       55
@@ -793,8 +811,8 @@
       "recurring"
     ],
     "saas": true,
-    "scripts": "api\\.geoapify\\.com",
-    "website": "https://www.geoapify.com"
+    "website": "https://www.geoapify.com",
+    "xhr": "(?:api|maps)\\.geoapify\\.com"
   },
   "Geobytes": {
     "cats": [
@@ -1004,7 +1022,10 @@
       75
     ],
     "description": "GetResponse is an email marketing app that allows you to create a mailing list and capture data onto it.",
-    "dom": "form[action*='.getresponse.com/']",
+    "dom": [
+      "getresponse-form",
+      "form[action*='.getresponse.com/']"
+    ],
     "icon": "GetResponse.svg",
     "js": {
       "GRAPP": "",
@@ -1664,9 +1685,6 @@
     ],
     "description": "Gleam is a marketing app that aids in expanding business email lists, ecommerce stores, SaaS businesses, and Facebook audiences.",
     "icon": "Gleam.svg",
-    "js": {
-      "Gleam": ""
-    },
     "pricing": [
       "low",
       "recurring"
@@ -2648,10 +2666,7 @@
     },
     "saas": true,
     "scriptSrc": [
-      "googlesyndication\\.com/",
-      "ad\\.ca\\.doubleclick\\.net",
-      "2mdn\\.net",
-      "ad\\.ca\\.doubleclick\\.net"
+      "pagead2\\.googlesyndication\\.com/pagead/js/adsbygoogle\\.js"
     ],
     "website": "https://www.google.com/adsense/start/"
   },
@@ -2997,6 +3012,10 @@
     },
     "saas": true,
     "scriptSrc": "\\.googletagmanager\\.com/(gtm\\.js)?",
+    "scripts": [
+      "googletagmanager\\.com/gtm\\.js\\?id=GTM-[A-Z0-9-]+",
+      "googletagmanager\\.com/gtm\\.js\\?id=['\"]?\\s*\\+\\s*i[\\s\\S]{0,250}GTM-[A-Z0-9-]+"
+    ],
     "website": "https://www.google.com/tagmanager"
   },
   "Google Tag Manager for WordPress": {
@@ -3070,6 +3089,22 @@
     },
     "icon": "Google.svg",
     "website": "https://workspace.google.com/"
+  },
+  "Google for WooCommerce": {
+    "cats": [
+      87
+    ],
+    "description": "Google for WooCommerce is a WordPress plugin for connecting WooCommerce stores with Google Merchant Center and Google Ads.",
+    "icon": "Google.svg",
+    "implies": "Google Ads",
+    "oss": true,
+    "requires": [
+      "WordPress",
+      "WooCommerce"
+    ],
+    "scriptSrc": "/wp-content/plugins/google-listings-and-ads/js/build/gtag-events\\.js(?:\\?ver=([\\d.]+))?\\;version:\\1",
+    "scripts": "developer_id\\.dOGY3NW",
+    "website": "https://wordpress.org/plugins/google-listings-and-ads/"
   },
   "Goope": {
     "cats": [

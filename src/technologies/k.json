@@ -83,6 +83,18 @@
     "saas": true,
     "website": "https://www.kmk.net.tr"
   },
+  "KOMERO": {
+    "cats": [
+      6
+    ],
+    "description": "KOMERO is an ecommerce platform and website builder for creating online stores.",
+    "icon": "KOMERO.png",
+    "meta": {
+      "generator": "^KOMERO$"
+    },
+    "saas": true,
+    "website": "https://www.komero.ge"
+  },
   "KPA": {
     "cats": [
       67
@@ -1121,7 +1133,8 @@
       "poa"
     ],
     "saas": true,
-    "scripts": "\\.kimonix\\.com",
+    "scriptSrc": "(?:api\\.)?kimonix\\.com/",
+    "scripts": "(?:api\\.)?kimonix\\.com",
     "website": "https://www.kimonix.com"
   },
   "Kindful": {
@@ -1533,6 +1546,27 @@
     "saas": true,
     "website": "https://kleeja.net"
   },
+  "Kleep": {
+    "cats": [
+      76
+    ],
+    "description": "Kleep is an AI sizing and personalization platform for fashion ecommerce retailers.",
+    "icon": "Kleep.svg",
+    "js": {
+      "KleepSDK": "",
+      "openKleepA11y": ""
+    },
+    "pricing": [
+      "poa"
+    ],
+    "saas": true,
+    "scriptSrc": [
+      "cdn\\.shopify\\.com/extensions/[^/]+/kleep-[^/]+/assets/kleep-[^/]+\\.js",
+      "module\\.kleep\\.ai/api/widget"
+    ],
+    "website": "https://kleep.ai",
+    "xhr": "(?:drawer|fit|module|products)\\.kleep\\.ai"
+  },
   "Kleer": {
     "cats": [
       1
@@ -1738,6 +1772,25 @@
     },
     "oss": true,
     "website": "https://knockoutjs.com"
+  },
+  "Knoku": {
+    "cats": [
+      4
+    ],
+    "description": "Knoku is an AI answer platform that indexes documentation and support content for website widgets, API, and chat integrations.",
+    "icon": "Knoku.svg",
+    "js": {
+      "__KNOKU_CONFIG__": ""
+    },
+    "pricing": [
+      "freemium",
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn\\.knoku\\.com/widget\\.js",
+    "website": "https://knoku.com",
+    "xhr": "api\\.knoku\\.com/api/v1/config/"
   },
   "Knoma": {
     "cats": [

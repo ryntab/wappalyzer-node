@@ -475,7 +475,6 @@
     ],
     "cookies": {
       "X-Magento-Vary": "",
-      "frontend": "\\;confidence:50",
       "mage-cache-storage": "",
       "mage-cache-storage-section-invalidation": "",
       "mage-translation-file-version": "",
@@ -1076,6 +1075,9 @@
       "Content-Security-Policy": "app\\.makeswift\\.com"
     },
     "icon": "Makeswift.svg",
+    "meta": {
+      "makeswift-preview-info": "isPreview"
+    },
     "pricing": [
       "freemium",
       "mid",
@@ -1083,7 +1085,11 @@
       "poa"
     ],
     "saas": true,
-    "scripts": "app\\.makeswift\\.com",
+    "scripts": [
+      "app\\.makeswift\\.com",
+      "@@makeswift/type",
+      "Makeswift(?:Provider|Component)"
+    ],
     "website": "https://www.makeswift.com"
   },
   "Malomo": {
@@ -1809,7 +1815,7 @@
       41
     ],
     "description": "MasterCard facilitates electronic funds transfers throughout the world, most commonly through branded credit cards, debit cards and prepaid cards.",
-    "dom": "[aria-labelledby='pi-mastercard'], [aria-labelledby='pi-master']",
+    "dom": "[aria-labelledby='pi-mastercard'], [aria-labelledby='pi-master'], img[alt='master'][src*='/checkout-web/assets/'][src*='/assets/master.'][src$='.svg']",
     "icon": "Mastercard.svg",
     "website": "https://www.mastercard.com"
   },
@@ -1846,6 +1852,21 @@
       "generator": "^MasterkinG(?:)"
     },
     "website": "https://masterking32.com"
+  },
+  "Masthead CMS": {
+    "cats": [
+      1
+    ],
+    "description": "Masthead CMS is a content management system for local news publishers and editorial teams.",
+    "meta": {
+      "generator": "^Masthead CMS$"
+    },
+    "pricing": [
+      "poa",
+      "recurring"
+    ],
+    "saas": true,
+    "website": "https://mastheadcms.com"
   },
   "Mastodon": {
     "cats": [
@@ -2226,6 +2247,20 @@
     "scripts": "\\.maxxton\\.net",
     "website": "https://maxxton.com"
   },
+  "Mayson": {
+    "cats": [
+      51
+    ],
+    "description": "Mayson is an AI-powered website and app builder platform.",
+    "dom": "link[href*='app.mayson.dev/icons/brand-logo-192x192.png']",
+    "icon": "Mayson.png",
+    "js": {
+      "__MAYSON": ""
+    },
+    "saas": true,
+    "scriptSrc": "\\.mayson\\.app/assets/index-[A-Za-z0-9]+\\.js",
+    "website": "https://mayson.dev"
+  },
   "Mazeed+": {
     "cats": [
       76
@@ -2412,12 +2447,18 @@
       6
     ],
     "cookies": {
+      "_medusa_cache_id": "^[\\da-f-]{36}$",
       "medusa.sid": ""
     },
     "description": "Medusa is an open-source ecommerce platform that enables users to create online stores.",
     "dom": "div.content-container > a[href*='www.medusajs.com'], a[href*='mailto:hello@medusajs.com']",
     "icon": "MedusaJs.svg",
     "oss": true,
+    "scripts": [
+      "Initiating Medusa client with default headers",
+      "x-publishable-api-key",
+      "medusajs\\.app[^\\n]+publishableKey"
+    ],
     "website": "https://medusajs.com"
   },
   "Meebo": {
@@ -2517,6 +2558,27 @@
     "scriptSrc": "static\\.meiqia\\.com",
     "scripts": "static\\.meiqia\\.com",
     "website": "https://www.meiqia.com"
+  },
+  "Meku": {
+    "cats": [
+      51
+    ],
+    "description": "Meku is an AI website and web app builder for creating and deploying full-stack sites.",
+    "icon": "Meku.svg",
+    "meta": {
+      "generator": "^Meku$"
+    },
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": [
+      "assets\\.meku\\.app/public/(?:meku-analytics-v1|badge-v2)\\.js",
+      "cdn\\.meku\\.dev/meku/templates/"
+    ],
+    "website": "https://meku.dev"
   },
   "Melibo": {
     "cats": [
@@ -3785,13 +3847,16 @@
     "js": {
       "__NEXT_DATA__.props.pageProps.favicons.browserconfig": "mintlify\\..+\\.amazonaws\\.com"
     },
+    "meta": {
+      "generator": "^Mintlify$"
+    },
     "pricing": [
       "freemium",
       "mid",
       "recurring"
     ],
     "saas": true,
-    "scripts": "\\.mintlify\\.app",
+    "scripts": "\\.mintlify\\.app|/mintlify-assets/_next/static/",
     "website": "https://mintlify.com"
   },
   "Mintox": {
@@ -3874,6 +3939,25 @@
     "saas": true,
     "scripts": "mirakl\\.track",
     "website": "https://www.mirakl.com"
+  },
+  "Mirra": {
+    "cats": [
+      6
+    ],
+    "description": "Mirra is a try-before-you-buy and post-purchase ecommerce platform for fashion, apparel, and beauty brands.",
+    "dom": "#try-with-mirra-product-container, .try-with-mirra-extension, a[href*='trywithmirra.com/terms-and-conditions']",
+    "icon": "Mirra.svg",
+    "js": {
+      "TryWithMirra": ""
+    },
+    "pricing": [
+      "recurring",
+      "poa"
+    ],
+    "requires": "Shopify",
+    "saas": true,
+    "scriptSrc": "cdn\\.shopify\\.com/extensions/[^/]+/mirra-[^/]+/assets/mirra-product-page\\.js",
+    "website": "https://trywithmirra.com"
   },
   "Mirus": {
     "cats": [

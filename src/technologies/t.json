@@ -201,6 +201,23 @@
     "scriptSrc": "\\.titanpush\\.com",
     "website": "https://www.titanpush.com"
   },
+  "TMW Shield": {
+    "cats": [
+      16
+    ],
+    "description": "TMW Shield is a DDoS mitigation and proxy service for protected network, hosting, and application traffic.",
+    "headers": {
+      "server": "^TMW Shield$",
+      "x-tmw-cache": ""
+    },
+    "icon": "TMW-Shield.svg",
+    "pricing": [
+      "mid",
+      "recurring"
+    ],
+    "saas": true,
+    "website": "https://www.tmw.global"
+  },
   "TN Express Web": {
     "cats": [
       1
@@ -435,6 +452,16 @@
     "saas": true,
     "scriptSrc": "app\\.tableo\\.com",
     "website": "https://tableo.com"
+  },
+  "Tabler Icons": {
+    "cats": [
+      17
+    ],
+    "description": "Tabler Icons is an open-source icon library with SVG, icon font, and framework packages for web interfaces.",
+    "dom": "link[href*='tabler-icons'], svg.icon-tabler, svg.tabler-icon, i.ti[class*='ti-']",
+    "icon": "Tabler Icons.svg",
+    "oss": true,
+    "website": "https://tabler.io/icons"
   },
   "Taboola": {
     "cats": [
@@ -709,11 +736,13 @@
     "cats": [
       66
     ],
-    "css": "--tw-(?:rotate|translate|space-x|text-opacity|border-opacity|bg-opacity|scale|ring|blur|shadow|brightness|contrast|grayscale|invert|sepia)",
+    "css": "--tw-(?:rotate|translate|skew|space-[xy]|divide-[xy]|text-opacity|border(?:-opacity|-style)|bg-opacity|scale|ring|blur|shadow|drop-shadow|backdrop|brightness|contrast|grayscale|hue-rotate|invert|opacity|saturate|sepia|font-weight|tracking|leading|duration|ease|content|gradient)",
     "description": "Tailwind CSS is a utility-first CSS framework for building custom user interfaces.",
     "dom": {
       "body [class]": {
-        "class": "\\b(?:flex|grid|text-(?:xs|sm|base|lg|xl)|bg-[a-z]+-[0-9]{3}|px-\\d+|py-\\d+|rounded(?:-[a-z]+)?|shadow(?:-[a-z]+)?)\\b\\;confidence:50"
+        "attributes": {
+          "class": "(?:^|\\s)(?:(?:sm|md|lg|xl|2xl|hover|focus|active|visited|disabled|enabled|first|last|odd|even|required|valid|invalid|checked|empty|target|open|default|indeterminate|placeholder-shown|autofill|read-only|before|after|first-letter|first-line|marker|selection|file|backdrop|placeholder|dark|motion-safe|motion-reduce|portrait|landscape|print|contrast-more|contrast-less|focus-within|focus-visible|group-hover|group-focus|peer-hover|peer-focus):)*(?:text-(?:xs|sm|base|lg|xl)|(?:bg|from|via|to|text|border|ring)-[a-z]+-[0-9]{3}|rounded-(?:md|xl|2xl|3xl|full)|shadow-(?:md|xl|2xl|inner)|[a-z-]+-\\[[^\\]]+\\])(?:\\s|$)\\;confidence:50"
+        }
       },
       "link[rel='stylesheet'][href*='.css']": {
         "attributes": {
@@ -944,11 +973,18 @@
       59
     ],
     "description": "TanStack is a set of headless JavaScript libraries for building web application features such as data fetching, tables, routing, virtualization, and state management.",
-    "dom": "link[href*='@tanstack']",
+    "dom": [
+      "link[href*='@tanstack']",
+      "link[rel='modulepreload'][href*='tanstack-query-']",
+      "link[rel='modulepreload'][href*='tanstack-router-']"
+    ],
     "icon": "TanStack.svg",
     "oss": true,
     "scriptSrc": "/static/.*npm\\.tanstack.*\\.js",
-    "scripts": "(?:https?:)?\\/\\/(?:www\\.)?tanstack\\.com(?:\\/[^\"'>]*)?",
+    "scripts": [
+      "(?:https?:)?\\/\\/(?:www\\.)?tanstack\\.com(?:\\/[^\"'>]*)?",
+      "\\$_TSR\\.router="
+    ],
     "website": "https://tanstack.com"
   },
   "Tangiblee": {
@@ -4604,6 +4640,23 @@
     "scriptSrc": "cdn\\.treasuredata\\.com/",
     "website": "https://www.treasuredata.com"
   },
+  "Treatwell": {
+    "cats": [
+      72
+    ],
+    "description": "Treatwell is an online marketplace and booking platform for hair, beauty, and wellness appointments.",
+    "icon": "Treatwell.png",
+    "meta": {
+      "og:site_name": "^Treatwell$"
+    },
+    "pricing": [
+      "recurring"
+    ],
+    "saas": true,
+    "scripts": "isTreatwellBrandedWidget",
+    "url": "^https?://(?:www\\.)?treatwell\\.(?:at|be|ch|co\\.uk|com|de|es|fr|gr|ie|it|lt|nl|pt)(?:[/?#]|$)",
+    "website": "https://www.treatwell.com"
+  },
   "Tremor": {
     "cats": [
       59
@@ -5706,6 +5759,29 @@
     "saas": true,
     "scripts": "spenden\\.twingle\\.de",
     "website": "https://www.twingle.de"
+  },
+  "Twipla": {
+    "cats": [
+      10
+    ],
+    "description": "Twipla is a website intelligence platform with traffic analytics, heatmaps, session recordings, funnels, and visitor surveys.",
+    "dom": {
+      "script#wix-viewer-model": {
+        "text": "Twipla Session Recordings|dad178e5-571d-45bf-89a0-c1f97242199f"
+      }
+    },
+    "icon": "Twipla.svg",
+    "js": {
+      "_visaSettings": ""
+    },
+    "pricing": [
+      "low",
+      "freemium",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "(?:www\\.)?twipla\\.com/analytics/main\\.js",
+    "website": "https://www.twipla.com"
   },
   "TwistedWeb": {
     "cats": [

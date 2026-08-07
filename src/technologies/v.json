@@ -491,6 +491,15 @@
     "scripts": "www\\.vectera\\.com",
     "website": "https://go.vectera.com"
   },
+  "Vee": {
+    "cats": [
+      68
+    ],
+    "description": "Vee is an accessibility plugin for adding assistive browsing controls to websites.",
+    "scriptSrc": "vee-crm\\.com/js/",
+    "scripts": "Vee main\\.js - JavaScript Core // Version: ([\\d.]+)\\;version:\\1",
+    "website": "https://vee-crm.com"
+  },
   "Velaro": {
     "cats": [
       52
@@ -1744,7 +1753,7 @@
     "cats": [
       41
     ],
-    "dom": "[aria-labelledby='pi-visa']",
+    "dom": "[aria-labelledby='pi-visa'], img[alt='visa'][src*='/checkout-web/assets/'][src*='/assets/visa.'][src$='.svg']",
     "icon": "Visa.svg",
     "js": {
       "visaApi": "",
@@ -1873,6 +1882,16 @@
     "saas": true,
     "scriptSrc": "\\.viskan\\.com/",
     "website": "https://www.viskan.com/fi-fi"
+  },
+  "Vista HCM": {
+    "cats": [
+      101
+    ],
+    "description": "Vista HCM is a human capital management suite by PDS for HR, payroll, benefits, recruiting, onboarding, time tracking, self-service, analytics, and reporting.",
+    "dom": "link[href*='/Skin/VistaHCM/'], link[href*='/App_Themes/Vista/']",
+    "scripts": "application:'PDSVISTA'|dialogSkin:'VistaHCM'",
+    "url": "^https?://[^/]+\\.vistahrms\\.com/",
+    "website": "https://www.pdssoftware.com/vista-overview/"
   },
   "Visual Composer": {
     "cats": [

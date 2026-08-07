@@ -86,6 +86,7 @@
     "dom": "form[action*='login_process.php'], form[action*='assets/mail.php']",
     "headers": {
       "Server": "php/?([\\d.]+)?\\;version:\\1",
+      "Set-Cookie": "PHPSESSID=",
       "X-Powered-By": "^PHP/?([\\d.]+)\\;version:\\1"
     },
     "icon": "PHP.svg",
@@ -410,7 +411,7 @@
       37
     ],
     "description": "Paessler is a network monitoring platform that provides complete visibility into IT infrastructure through a single solution, helping detect, analyze, and resolve performance issues across systems and devices.",
-    "dom": "span[class*='paesslerlogo'] > a[href*'www.paessler.com']",
+    "dom": "span[class*='paesslerlogo'] > a[href*='www.paessler.com']",
     "icon": "Paessler.svg",
     "pricing": [
       "low",
@@ -1371,7 +1372,7 @@
       41
     ],
     "description": "PayFast is a payments processing service for South Africans & South African websites.",
-    "dom": "[aria-labelledby='pi-payfast_instant_eft']",
+    "dom": "[aria-labelledby='pi-payfast_instant_eft'], img[alt='payfast instant eft'][src*='/checkout-web/assets/'][src*='/assets/payfast_instant_eft.'][src$='.svg']",
     "icon": "Payfast.svg",
     "website": "https://www.payfast.co.za/"
   },
@@ -1616,6 +1617,10 @@
       "X-Powered-By": "Payload"
     },
     "icon": "PayloadCMS.svg",
+    "meta": {
+      "og:description": "Payload is a headless CMS and application framework built with TypeScript, Node\\.js, and React\\.",
+      "og:site_name": "^Payload App$"
+    },
     "oss": true,
     "pricing": [
       "freemium",
@@ -3899,14 +3904,19 @@
     ],
     "cpe": "cpe:2.3:a:plone:plone:*:*:*:*:*:*:*:*",
     "description": "Plone is a free and open source content management system (CMS) built on top of the Zope application server.",
-    "dom": "link[href^='/++resource++']",
+    "dom": "link[href^='/++resource++'], link[href*='resourceplone.']",
     "icon": "Plone.svg",
     "implies": "Python",
+    "js": {
+      "ploneDnDReorder": "",
+      "ploneFormTabbing": "",
+      "registerPloneFunction": ""
+    },
     "meta": {
-      "generator": "Plone"
+      "generator": "^Plone(?:\\b|\\s+-)"
     },
     "oss": true,
-    "scriptSrc": "^/\\+\\+resource\\+\\+",
+    "scriptSrc": "(?:^/\\+\\+resource\\+\\+|/portal_javascripts/[^?#]*resourceplone\\.)",
     "website": "https://plone.org/"
   },
   "Plotly": {
@@ -5425,9 +5435,11 @@
       "mid",
       "recurring"
     ],
-    "requiresCategory": 12,
     "saas": true,
-    "scriptSrc": "\\.prepr\\.io/",
+    "scriptSrc": [
+      "\\.prepr\\.io/",
+      "cdn\\.tracking\\.prepr\\.io/js/prepr_v2\\.min\\.js"
+    ],
     "scripts": "\\.files\\.prepr\\.io",
     "website": "https://prepr.io"
   },
@@ -6532,6 +6544,7 @@
         "protonmail-verification="
       ]
     },
+    "dom": "link[rel='canonical'][href='https://mail.proton.me/'], meta[name='application-name'][content='Proton Mail'], meta[name='apple-mobile-web-app-title'][content='Proton Mail']",
     "icon": "Proton Mail.svg",
     "saas": true,
     "website": "https://proton.me/mail"
@@ -6675,16 +6688,24 @@
       60
     ],
     "description": "Proxmox VE is an open-source virtualisation and containerisation platform that provides a web-based management interface to manage virtual machines, containers, storage, and networking.",
+    "dom": "img[src*='pwt/images/proxmox_logo.svg'][alt='Proxmox']",
     "headers": {
       "Server": "pve-api-daemon/[\\d\\.]+"
     },
     "icon": "Proxmox.svg",
+    "js": {
+      "Proxmox.Setup.auth_cookie_name": "^PVEAuthCookie$"
+    },
     "oss": true,
     "pricing": [
       "low",
       "recurring"
     ],
     "saas": true,
+    "scriptSrc": [
+      "/pve2/js/pvemanagerlib\\.js\\?ver=([\\d.]+)\\;version:\\1",
+      "/proxmoxlib\\.js"
+    ],
     "website": "https://proxmox.com/en/proxmox-ve"
   },
   "Psyma": {

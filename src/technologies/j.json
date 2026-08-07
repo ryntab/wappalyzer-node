@@ -265,8 +265,10 @@
       1,
       47
     ],
-    "dom": "script#staticAssetAggregatedJavascrip",
+    "description": "Jahia DX is a digital experience platform for building and managing websites, portals, and personalized content.",
+    "dom": "script#jahia-data-ctx, script#staticAssetAggregatedJavascrip, script#staticAssetAggregatedJavascript, script[src*='/javascript/initJahiaContext.js']",
     "icon": "JahiaDX.svg",
+    "scriptSrc": "/javascript/initJahiaContext\\.js",
     "website": "https://www.jahia.com/dx"
   },
   "Jalios": {
@@ -326,6 +328,17 @@
     "saas": true,
     "scriptSrc": "schedule\\.jarvisanalytics\\.com",
     "website": "https://www.jarvisanalytics.com"
+  },
+  "Jaspr": {
+    "cats": [
+      18
+    ],
+    "description": "Jaspr is an open-source web framework for building websites and applications with Dart.",
+    "dom": "a.jaspr-badge-link[href='https://jaspr.site']",
+    "implies": "Dart",
+    "oss": true,
+    "scriptSrc": "/main\\.client\\.dart\\.js",
+    "website": "https://jaspr.site"
   },
   "Java": {
     "cats": [
@@ -659,6 +672,25 @@
     "saas": true,
     "url": "\\.jimdo(?:site)?\\.com/",
     "website": "https://www.jimdo.com"
+  },
+  "Jimo": {
+    "cats": [
+      58
+    ],
+    "description": "Jimo is a digital adoption platform for building in-app onboarding, product tours, and user engagement flows.",
+    "dom": "script[src*='undercity.usejimo.com/jimo-invader.js']",
+    "icon": "Jimo.svg",
+    "js": {
+      "JIMO_PROJECT_ID": "",
+      "jimo": "\\;confidence:50"
+    },
+    "pricing": [
+      "mid",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "undercity\\.usejimo\\.com/jimo-invader\\.js",
+    "website": "https://jimo.ai"
   },
   "Jirafe": {
     "cats": [

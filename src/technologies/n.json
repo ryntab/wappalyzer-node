@@ -923,6 +923,25 @@
     "scriptSrc": "themes/neve\\S*\\.js(?:\\?ver=([0-9.]+))?\\;version:\\1",
     "website": "https://themeisle.com/themes/neve/"
   },
+  "Nevuto": {
+    "cats": [
+      6
+    ],
+    "description": "Nevuto is a hosted ecommerce platform for building online stores with themes, checkout, payments, shipping, and sales-channel tools.",
+    "icon": "Nevuto.svg",
+    "meta": {
+      "generator": "^Nevuto$"
+    },
+    "pricing": [
+      "freemium",
+      "low",
+      "recurring"
+    ],
+    "saas": true,
+    "scriptSrc": "cdn\\.nevu\\.to/s/files/.+/scripts/(?:main|vendor)\\.js",
+    "url": "^https?://[^/]+\\.nevu\\.to(?:[/?#]|$)",
+    "website": "https://nevuto.com"
+  },
   "New Relic": {
     "cats": [
       78
@@ -937,7 +956,6 @@
     "pricing": [
       "freemium",
       "payg",
-      "low",
       "mid",
       "recurring"
     ],
@@ -1122,6 +1140,7 @@
       "__NEXT_DATA__": "",
       "next.version": "^(.+)$\\;version:\\1"
     },
+    "scriptSrc": "/_next/static/",
     "website": "https://nextjs.org"
   },
   "NextAuth.js": {
@@ -2073,6 +2092,24 @@
     "saas": true,
     "scripts": "NOWFLOATS_POSITION",
     "website": "https://www.nowfloats.com"
+  },
+  "Nsin": {
+    "cats": [
+      31
+    ],
+    "description": "Nsin is a connectivity-focused CDN for keeping websites reachable across regions and networks.",
+    "headers": {
+      "Server": "^NSIN$",
+      "X-Nsin-Cache": "",
+      "X-Nsin-Edge": ""
+    },
+    "icon": "Nsin.png",
+    "pricing": [
+      "poa",
+      "recurring"
+    ],
+    "saas": true,
+    "website": "https://nsin.ir/"
   },
   "Nucleus CMS": {
     "cats": [
